@@ -1,0 +1,22 @@
+{
+  "description": "Runs executed on a discovery pool before registration. Excluded from every analysis; their seeds are retired and never reused.",
+  "runs": [
+    {
+      "universe": "primary",
+      "split": "random_r0",
+      "side": "D",
+      "objective": "Y1",
+      "prior": "P_phys_fixed",
+      "beta": 0.5,
+      "seed": 0,
+      "engine": "run_search.py v1.0 (pre-release copy, guard disabled by a mutation test)",
+      "date": "2026-09-27",
+      "reason": "Mutation test of the discovery guard called the CLI with real inputs while the guard was disabled.",
+      "output": "Written to a temporary directory and deleted unread; no outcome was inspected; no hash was taken.",
+      "excluded_from_analysis": true,
+      "seed_retired": true,
+      "note": "The engine is deterministic, so rerunning this configuration would regenerate the same run; seed 0 is therefore never used (pilot seeds 10-14, confirmatory seeds 100-109).",
+      "decision_log_entry": 25
+    }
+  ]
+}

@@ -38,9 +38,11 @@ echo "== 2/4 candidate pool"
 python3 build_pool.py --snapshot "$SNAP" --reference "$OUT/elemental_reference_springer2005_v1.csv" --out-dir "$OUT" > "$OUT/build_pool.log"
 echo "== 3/4 splits"
 python3 make_splits.py --pool "$OUT/pool_v1.csv" --out-dir "$OUT" > "$OUT/make_splits.log"
-echo "== 4/4 priors and alignment (primary universe)"
-python3 build_priors.py --pool "$OUT/pool_v1.csv" --splits "$OUT/splits_v1.csv" \
-    --reference "$OUT/elemental_reference_springer2005_v1.csv" --out-dir "$OUT" > "$OUT/build_priors.log" 2>/dev/null
+echo "== 4/4 priors and alignment (primary and both sensitivity universes)"
+for U in primary sens1_no_Pm_Tc unscreened; do
+    OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 python3 build_priors.py --pool "$OUT/pool_v1.csv" --splits "$OUT/splits_v1.csv" \
+        --reference "$OUT/elemental_reference_springer2005_v1.csv" --universe "$U" --out-dir "$OUT" > "$OUT/build_priors_$U.log" 2>/dev/null
+done
 
 echo "== compare"
 fail=0
