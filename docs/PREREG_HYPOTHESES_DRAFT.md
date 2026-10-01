@@ -43,9 +43,17 @@ universe carries MP's `theoretical` flag.
 
 ## 3. Search and outcome definitions
 
-**Engine.** GP (Matérn-5/2) + expected improvement over the discovery pool of
-one split. Selection score
-S_β = (1 − β)·rank(EI) + β·rank(P), greedy, one query per step.
+**Engine** (`run_search.py` v1.0, frozen). Scikit-learn Gaussian process,
+ConstantKernel × Matérn-5/2 with **one isotropic length-scale** over the 140
+descriptors standardised on the searched pool (bounds 1e-2–1e3), jitter 1e-6,
+normalised y, 2 optimiser restarts, random_state 0 (choice: decision-log entry
+23, history-only probe). Expected improvement over the best observed y
+(ξ = 0), rounded to 9 significant digits before ranking. Selection score
+S_β = (1 − β)·rank(EI) + β·rank(P) over the remaining candidates (average
+ranks), greedy, one query per step; β = 0 never reads P and β = 1 never fits
+the GP. The β = 0 run of a (split, seed, objective) is shared by all priors.
+The engine obtains y only through a logged oracle, and refuses to search a
+discovery pool without a registration identifier, which it records.
 Prior scores are rounded to 12 significant digits, so mathematically equal
 scores are exactly equal on every platform. Ties in rank(P) (polymorphs under
 P_phys; different compositions whose elements share a tabulated G, e.g. Y/Dy,

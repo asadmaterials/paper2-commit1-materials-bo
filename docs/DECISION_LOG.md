@@ -35,6 +35,11 @@ by separate AI-assisted reviews.]
 | 20 | 2026-09-27 | Primary efficiency outcome T95 → T99 (T95 degenerate: 40% of random initial designs already contain a top-5% material) | pool size only (combinatorial calculation) | no |
 | 21 | 2026-09-27 | H3 sign-reversal prediction retired (no anti-aligned prior in the alignment table) | alignment table | yes |
 | 22 | 2026-09-27 | `build_priors.py` v2.1: prior scores computed with `math.fsum` in sorted element order and direct-difference distances (no BLAS), rounded to 12 significant digits. Cause: cross-environment rebuild (Colab, Python 3.13) mismatched `priors_v2_primary.csv`. Python ≥ 3.12 changed float `sum()`, and BLAS results vary by machine; 24–36 pairs of different compositions per split have mathematically equal P_phys (Y/Dy share G = 25.5 GPa, Er/Ge share 29.6 GPa), and v2.0 ordered some of them by round-off instead of the hash tie-break (e.g. TiGe2 vs ErTiGe; 4 rank changes). Alignment table unchanged. v2.1 verified identical on Python 3.11 and 3.13 and across BLAS thread counts | rebuild hashes; prior values of the two environments | no (ranks of prior scores only) |
+| 23 | 2026-09-27 | GP input representation: isotropic Matérn-5/2 on all 140 standardised descriptors (one length-scale), chosen over 140-dim ARD, PCA-10 + ARD and PCA-20 + ARD | `engine_design_probe.py`: pure-EI search (β = 0) on the **history side only** of 4 splits, Y1 and Y2, 5 paired seeds. Isotropic found more top-5% materials than every alternative (mean +2.1 to +6.6 per run; hierarchical-bootstrap CI excludes 0 for ARD on both objectives and for PCA on Y2) | history outcomes only; **no discovery-side data** |
+| 24 | 2026-09-27 | Search engine frozen as `run_search.py` v1.0 (spec in the draft, Sect. 3). EI rounded to 9 significant digits and ties broken by the hash rule, following entry 22. 13 tests on history pools and synthetic data; 7 deliberate engine bugs each caught by at least one test; run hashes identical on Python 3.11 and 3.13 and across BLAS thread counts | history pools and synthetic data only | history only |
+| 25 | 2026-09-27 | **Protocol deviation.** While mutation-testing the discovery guard (guard deliberately disabled), the guard test executed **one discovery-side run**: random_r0, Y1, P_phys_fixed, β = 0.5, seed 0 (a pilot seed). Its output file was deleted **unread**; no outcome of it was inspected. Cause: the test called the CLI with real inputs. Fix: the guard test now uses nonexistent input paths, so a failing guard crashes before any search (verified with the same mutant) | none (output not read) | no |
+| 26 | 2026-09-27 | Engine cross-machine check passed on Colab (Python 3.13.15, single-threaded BLAS): 13/13 tests, both reference run hashes identical (`ENGINE_CHECK_COLAB_RESULT_2026-09-27.md`). Reference environment added to `ENGINE_CHECK_COLAB.md`. Not tested on Colab: multi-threaded BLAS (tested only in the reference VM, 1 vs 2 threads); all production runs will set `OMP_NUM_THREADS=1` | history pool only | history only |
+| 27 | 2026-09-28 | Reference verification completed: all 355 values (density, G, E, ν, v_t) of the 71 pool elements, including 23 cells that are blank in the book, match the printed tables; **no corrections**; reference table v1 final, pool unchanged. Method: a separate AI-assisted read of the handbook extract plus a manual look by the author (Asad); the assistant additionally checked the Poisson ratios of Nb, Cr and Te on the rendered pages | handbook pages only | no |
 
 ## Threshold sensitivity (descriptive; the frozen rule is unchanged)
 
@@ -46,10 +51,9 @@ by separate AI-assisted reviews.]
 
 ## Known limitations recorded at decision time
 
-- Extraction verification: density and G of the 71 pool elements were compared
-  visually against the rendered handbook pages; **E, ν and v_t were visually
-  verified only for flagged elements**. A full independent check of these
-  three columns is pending (`reference_verification_sheet.csv`).
+- Extraction verification: completed 2026-09-28 (entry 27); all five columns of
+  the 71 pool elements match the printed tables. The check was AI-assisted plus a
+  manual look, so it is not a fully independent human transcription.
 - Artifacts to date were generated in the assistant's environment (Python 3.11.15,
   numpy 2.4.4, scipy 1.17.1, pandas 2.3.3, matminer 0.10.1, pymatgen 2026.9.24,
   poppler pdftotext 24.02.0). Only `build_priors.py` uses pandas/matminer.
