@@ -1,0 +1,35 @@
+{
+  "created_utc": "2026-09-26T16:01:06+00:00",
+  "source": "Martienssen & Warlimont (eds.), Springer Handbook of Condensed Matter and Materials Data, Springer, 2005; tables 2.1-6B(b)..2.1-26B(b)",
+  "source_pdf_sha256": "dbee15d30fcd8426f3de0acf1b12801923cf46d04b2bb2e37110108ecf208153",
+  "script_sha256": "f7146cece6936b437f73a54ccd078624b50549094c0baa7e18f9b8d7c8517f30",
+  "pdftotext": "pdftotext version 24.02.0",
+  "rule": {
+    "nu_tol": 0.1,
+    "sound_rel_tol": 0.15,
+    "nu_implied_range": [
+      0,
+      0.5
+    ],
+    "logic": "eligible iff >=1 computable check passes",
+    "no_check_computable": "unavailable",
+    "repairs": "none"
+  },
+  "sensitivity_exclude": [
+    "Pm",
+    "Tc"
+  ],
+  "assertions_passed": [
+    "Cu density is copper's (8.96), not curium's (13.51)",
+    "Cm density 13.51",
+    "Al G = 27.8",
+    "Ca G = 7.85 with 348 K footnote",
+    "Nb G = 59.5 fails both checks",
+    "Hg unavailable",
+    "Pu modification alpha-Pu",
+    "W G = 152"
+  ],
+  "n_elements": 109,
+  "n_eligible": 61,
+  "csv_sha256": "fb9363a5b741596de99e902a2cd6a79c216145afe85180b0365c9641ebc70898"
+}

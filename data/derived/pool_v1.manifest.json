@@ -1,0 +1,152 @@
+{
+  "created_utc": "2026-09-26T16:02:07+00:00",
+  "mp_db_version": "2026.04.13",
+  "inputs": {
+    "elasticity.jsonl.gz": "4db3c2a0b600da330eeafd18525021971c585e753e051b94cd73e2f5c64763fc",
+    "summary.jsonl.gz": "b485561ade56cd7c15c6e819ac707276114945cb9d6a00ecce3dcb6b70ce91e6",
+    "reference_csv": "fb9363a5b741596de99e902a2cd6a79c216145afe85180b0365c9641ebc70898"
+  },
+  "script_sha256": "9d0f4f31ec46d1bd3a6489fc818936e1c387dabdec5126b9b8a9e74cbbf243e6",
+  "scope_excluded_elements": [
+    "Ar",
+    "At",
+    "B",
+    "Br",
+    "C",
+    "Cl",
+    "F",
+    "H",
+    "He",
+    "I",
+    "Kr",
+    "N",
+    "Ne",
+    "O",
+    "P",
+    "Rn",
+    "S",
+    "Se",
+    "Si",
+    "Xe"
+  ],
+  "sens1_excluded_elements": [
+    "Pm",
+    "Tc"
+  ],
+  "funnel": [
+    [
+      "all elasticity documents",
+      13283
+    ],
+    [
+      "state == successful",
+      11319
+    ],
+    [
+      "not deprecated",
+      11027
+    ],
+    [
+      "exactly one summary doc",
+      10982
+    ],
+    [
+      "is_metal True",
+      7670
+    ],
+    [
+      "nelements >= 2",
+      7501
+    ],
+    [
+      "no out-of-scope element",
+      4739
+    ],
+    [
+      "G_VRH finite and > 0",
+      4739
+    ],
+    [
+      "Born stable (eigenvalues > 0)",
+      4711
+    ],
+    [
+      "all elements reference-eligible (PRIMARY)",
+      3550
+    ]
+  ],
+  "structures_removed_by_reference_element": {
+    "Ga": 294,
+    "Hg": 211,
+    "As": 188,
+    "Te": 179,
+    "Nb": 110,
+    "Cr": 100,
+    "Ce": 64,
+    "Ac": 54,
+    "Pa": 27,
+    "Np": 7,
+    "Pu": 4
+  },
+  "audit_mp_neg_eig_warning_in_unscreened": 0,
+  "universes": {
+    "primary": {
+      "structures": 3550,
+      "compositions": 3363,
+      "compositions_with_polymorphs": 162,
+      "elements": 60,
+      "nelements": {
+        "2": 1697,
+        "3": 1843,
+        "4": 10
+      },
+      "G_vrh_GPa": {
+        "min": 0.8130000000000001,
+        "median": 36.3055,
+        "p95": 111.55799999999994,
+        "max": 248.808
+      },
+      "top5pct_size": 178,
+      "top10pct_size": 355
+    },
+    "sens1_no_Pm_Tc": {
+      "structures": 3378,
+      "compositions": 3191,
+      "compositions_with_polymorphs": 162,
+      "elements": 58,
+      "nelements": {
+        "2": 1664,
+        "3": 1704,
+        "4": 10
+      },
+      "G_vrh_GPa": {
+        "min": 0.8130000000000001,
+        "median": 36.5035,
+        "p95": 109.62154999999979,
+        "max": 248.808
+      },
+      "top5pct_size": 169,
+      "top10pct_size": 338
+    },
+    "unscreened": {
+      "structures": 4711,
+      "compositions": 4455,
+      "compositions_with_polymorphs": 219,
+      "elements": 71,
+      "nelements": {
+        "2": 2210,
+        "3": 2487,
+        "4": 14
+      },
+      "G_vrh_GPa": {
+        "min": 0.8130000000000001,
+        "median": 35.89,
+        "p95": 108.197,
+        "max": 248.808
+      },
+      "top5pct_size": 236,
+      "top10pct_size": 472
+    }
+  },
+  "pool_csv_sha256": "fb5873dabdc0cf462d6678fe47be30ab2f21e8fb659604cb208cecd3162f9540"
+}
