@@ -3,23 +3,31 @@ run_search.py — Paper 2 search engine (beta-weighted GP + EI over a fixed pool
 ===============================================================================
 One run = one (universe, split, side, objective, prior, beta, seed).
 
-Engine (frozen, v1.0)
----------------------
+Engine (v1.1, registration amendment of 2026-10)
+-----------------------------------------------
 Pool      : materials of the chosen universe on the chosen split side
             ("D" = discovery for experiments; "H" = history, for testing only).
 Inputs    : descriptors from features_v2_<universe>.csv, standardised on the
             searched pool (unsupervised; constant columns dropped).
 Surrogate : scikit-learn GaussianProcessRegressor,
-            ConstantKernel(1.0) * Matern(nu=2.5, one isotropic length-scale,
-            bounds 1e-2..1e3), alpha = 1e-6, normalize_y = True,
-            n_restarts_optimizer = 2, random_state = 0.
-            (Choice: decision-log entry 23, history-only probe.)
+            ConstantKernel (amplitude fitted, default bounds) * Matern(nu=2.5,
+            one isotropic length-scale, bounds 3.0..1e3, start 3.0),
+            alpha = 1e-6, normalize_y = True, n_restarts_optimizer = 2,
+            random_state = 0. (Isotropic form: decision-log entry 23.)
+            v1.0 had a lower length-scale bound of 1e-2. With two nearly
+            identical materials observed (polymorphs) the fit collapsed to
+            that bound, EI became equal for every candidate, beta = 0 picked
+            in hash order and every beta > 0 picked by the prior alone. The
+            bound 3.0 (below the typical nearest-neighbour distance of the
+            standardised descriptors) was chosen on history-side runs only.
 Acquisition: expected improvement over the best observed y (xi = 0), rounded
             to 9 significant digits before ranking.
 Selection : score = (1 - beta) * rank(EI) + beta * rank(P) over the remaining
             candidates (average ranks, 1 = worst); the highest score is
             queried; ties go to the smallest sha256("<split>:<material_id>").
             beta = 0 never reads P; beta = 1 never fits the GP.
+            beta in {0, 0.02, 0.05, 0.10, 0.25, 0.5, 0.75, 1} (v1.0: 0, 0.25,
+            0.5, 0.75, 1).
 Budget    : 10 initial points + 40 acquisitions. The initial design depends
             only on (split, seed): identical across objectives, priors, beta.
 Oracle    : direct lookup of the MP value; the engine can obtain y only by
@@ -29,8 +37,11 @@ Priors    : P0 (none; beta = 0 only), P_H_fixed, P_H_matched_Y2, P_phys_fixed,
 
 Discovery guard
 ---------------
-Searching a discovery pool requires --registered <registration id>, which is
-written into the run record. Without it the CLI refuses (history side is free).
+Searching a discovery pool requires --registered <Zenodo DOI of the
+registration>, which is written into the run record; the analysis accepts
+only records carrying the DOI of the registered plan. Without a DOI of the
+form 10.5281/zenodo.<number> the CLI refuses (history side is free).
+An existing run record is never overwritten.
 
 Usage
 -----
@@ -43,17 +54,21 @@ import argparse
 import csv
 import hashlib
 import json
+import os
 import platform
+import re
 from importlib import metadata
 from pathlib import Path
 
 import numpy as np
 from scipy.stats import norm, rankdata
 
-ENGINE_VERSION = "1.0"
+ENGINE_VERSION = "1.1"
 N_INIT, N_ACQ = 10, 40
 EI_SIG = 9
-BETAS = (0.0, 0.25, 0.5, 0.75, 1.0)
+BETAS = (0.0, 0.02, 0.05, 0.1, 0.25, 0.5, 0.75, 1.0)
+LS_LOWER = 3.0
+DOI_RE = re.compile(r"^10\.5281/zenodo\.\d+$")
 PRIORS = ("P0", "P_H_fixed", "P_H_matched_Y2", "P_phys_fixed", "P_phys_matched_Y2")
 UNIVERSE_FLAG = {"primary": "in_primary", "sens1_no_Pm_Tc": "in_sens1_no_Pm_Tc",
                  "unscreened": "in_unscreened"}
@@ -99,7 +114,7 @@ class Oracle:
 def fit_gp(Xo, yo):
     from sklearn.gaussian_process import GaussianProcessRegressor
     from sklearn.gaussian_process.kernels import ConstantKernel as C, Matern
-    k = C(1.0) * Matern(length_scale=1.0, nu=2.5, length_scale_bounds=(1e-2, 1e3))
+    k = C(1.0) * Matern(length_scale=LS_LOWER, nu=2.5, length_scale_bounds=(LS_LOWER, 1e3))
     gp = GaussianProcessRegressor(k, alpha=1e-6, normalize_y=True,
                                   n_restarts_optimizer=2, random_state=0)
     return gp.fit(Xo, yo)
@@ -130,12 +145,13 @@ def search(ids, Z, prior, oracle, beta, split, seed, n_init=N_INIT, n_acq=N_ACQ)
         cand = np.where(mask)[0]
         r_ei = np.zeros(len(cand))
         r_p = np.zeros(len(cand))
-        kern = None
+        kern, ties = None, None
         if beta < 1:
             gp = fit_gp(Z[obs], np.array(yo))
             mu, sd = gp.predict(Z[cand], return_std=True)
             ei = rsig(expected_improvement(mu, sd, max(yo)), EI_SIG)
             r_ei = rankdata(ei, method="average")
+            ties = int(np.sum(ei == ei.max()))            # size of the top-EI tie group
             kern = [round(float(v), 6) for v in np.exp(gp.kernel_.theta)]
         if beta > 0:
             r_p = rankdata(prior[cand], method="average")
@@ -146,7 +162,7 @@ def search(ids, Z, prior, oracle, beta, split, seed, n_init=N_INIT, n_acq=N_ACQ)
         obs.append(pick)
         steps.append({"t": t, "material_id": ids[pick],
                       "ei_rank": float(r_ei[j]), "prior_rank": float(r_p[j]),
-                      "n_cand": int(len(cand)), "kernel": kern})
+                      "n_cand": int(len(cand)), "kernel": kern, "ei_top_ties": ties})
     traj = [ids[i] for i in obs[n_init:]]
     return {"init": [ids[i] for i in init], "trajectory": traj,
             "y_init": yo[:n_init], "y_trajectory": yo[n_init:], "steps": steps,
@@ -213,19 +229,26 @@ def main(argv=None):
     ap.add_argument("--out-dir", default="runs")
     a = ap.parse_args(argv)
 
-    if a.side == "D" and not a.registered:
+    if a.side == "D" and not (a.registered and DOI_RE.match(a.registered)):
         raise SystemExit("Refusing to search a DISCOVERY pool without --registered "
-                         "<registration id>. Register the analysis plan first.")
+                         "<Zenodo DOI of the registration, 10.5281/zenodo.NNN>. "
+                         "Register the analysis plan first.")
     if a.prior == "P0" and a.beta != 0:
         raise SystemExit("P0 is only defined at beta = 0")
     if a.side == "H" and a.prior not in ("P0",):
         raise SystemExit("history-side runs support P0 only (prior files cover discovery)")
 
+    out = Path(a.out_dir)
+    name = f"{a.universe}_{a.split}_{a.side}_{a.objective}_{a.prior.replace(':', '-')}_b{a.beta}_s{a.seed}.json"
+    if (out / name).exists():
+        raise SystemExit(f"run record exists, not overwritten: {out / name}")
+
     ids, X, prow = load_pool(a.features, a.pool, a.splits, a.universe, a.split, a.side)
     prior = load_prior(a.priors, a.split, ids, a.prior)
     oracle = Oracle({m: objective_value(prow[m], a.objective) for m in ids})
     res = search(ids, standardise(X), prior, oracle, a.beta, a.split, a.seed)
-    assert oracle.queries == res["init"] + res["trajectory"]
+    if oracle.queries != res["init"] + res["trajectory"]:
+        raise SystemExit("oracle log differs from initial design + acquisitions")
 
     rec = {"engine_version": ENGINE_VERSION,
            "run": {"universe": a.universe, "split": a.split, "side": a.side,
@@ -235,11 +258,11 @@ def main(argv=None):
            "inputs": {k: sha256(getattr(a, k)) for k in ("features", "pool", "splits", "priors")},
            "script_sha256": sha256(__file__),
            "env": {"python": platform.python_version(),
-                   **{p: metadata.version(p) for p in ("numpy", "scipy", "scikit-learn")}},
+                   **{p: metadata.version(p) for p in ("numpy", "scipy", "scikit-learn")},
+                   "threads": {v: os.environ.get(v) for v in
+                               ("OMP_NUM_THREADS", "OPENBLAS_NUM_THREADS", "MKL_NUM_THREADS")}},
            **res}
-    out = Path(a.out_dir)
     out.mkdir(parents=True, exist_ok=True)
-    name = f"{a.universe}_{a.split}_{a.side}_{a.objective}_{a.prior.replace(':', '-')}_b{a.beta}_s{a.seed}.json"
     (out / name).write_text(json.dumps(rec, indent=1))
     print(f"{name}  run_hash {res['run_hash'][:16]}")
 

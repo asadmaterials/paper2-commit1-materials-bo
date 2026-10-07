@@ -1,3 +1,6 @@
+> SUPERSEDED. This early draft is kept for history only. The registered plans are
+> docs/registered_v1.0/PREREGISTRATION.md (v1.0) and docs/PREREGISTRATION.md (v1.1).
+
 # Paper 2 — Hypotheses, metrics and analysis plan (DRAFT v0.2)
 
 **Status:** draft, not yet registered. To be registered **before any optimization

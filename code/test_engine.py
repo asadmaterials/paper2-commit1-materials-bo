@@ -1,10 +1,11 @@
 """
-test_engine.py — tests for run_search.py. Uses HISTORY pools and synthetic data
-only; no discovery-side material is searched.
+test_engine.py — tests for run_search.py v1.1. Uses HISTORY pools and synthetic
+data only; no discovery-side material is searched.
 
 Usage: python test_engine.py FEATURES POOL SPLITS REFERENCE PRIORS
-Prints one line per test and, at the end, the run hashes used for the
-cross-environment determinism check.
+Prints one line per test. The reference run hashes (one 40-step search per
+beta value) are ASSERTED, so a change to the surrogate, the acquisition or
+the mixing weights fails the suite.
 """
 import sys
 import time
@@ -129,26 +130,30 @@ def test_prior_mixing_changes_path():
     a, _ = run(P, 0.0)
     b, _ = run(P, 0.5)
     c, _ = run(P, 1.0)
-    assert a["trajectory"] != b["trajectory"] != c["trajectory"]
+    t = [a["trajectory"], b["trajectory"], c["trajectory"]]
+    assert t[0] != t[1] and t[1] != t[2] and t[0] != t[2]
 
 
 @test
 def test_guard_refuses_discovery_without_registration():
-    try:
-        # Nonexistent inputs: if the guard ever fails, the call crashes on loading
-        # instead of searching a discovery pool.
-        rs.main(["--features", "/nonexistent/f.csv", "--pool", "/nonexistent/p.csv",
-                 "--splits", "/nonexistent/s.csv", "--priors", "/nonexistent/pr.csv",
-                 "--split", SPLIT, "--objective", "Y1", "--prior", "P_phys_fixed",
-                 "--beta", "0.5", "--seed", "0", "--out-dir", "/nonexistent/out"])
-    except SystemExit as e:
-        assert "Refusing" in str(e)
-        return
-    raise AssertionError("discovery run was not refused")
+    # Nonexistent inputs: if the guard ever fails, the call crashes on loading
+    # instead of searching a discovery pool.
+    base = ["--features", "/nonexistent/f.csv", "--pool", "/nonexistent/p.csv",
+            "--splits", "/nonexistent/s.csv", "--priors", "/nonexistent/pr.csv",
+            "--split", SPLIT, "--objective", "Y1", "--prior", "P_phys_fixed",
+            "--beta", "0.5", "--seed", "0", "--out-dir", "/nonexistent/out"]
+    for extra in ([], ["--registered", "yes"], ["--registered", "zenodo.123"]):
+        try:
+            rs.main(base + extra)
+        except SystemExit as e:
+            assert "Refusing" in str(e), f"{extra}: {e}"
+            continue
+        raise AssertionError(f"discovery run was not refused with {extra}")
 
 
 @test
 def test_rejects_invalid_inputs():
+    assert rs.BETAS == (0.0, 0.02, 0.05, 0.1, 0.25, 0.5, 0.75, 1.0)
     for bad in [(None, 0.5), (P, 0.3)]:
         try:
             run(*bad, n_acq=1)
@@ -157,13 +162,79 @@ def test_rejects_invalid_inputs():
         raise AssertionError(f"accepted invalid {bad[1]}")
 
 
+REFERENCE = {   # history pool random_r0, Y1, elemental-modulus prior, seed 1, 40 steps
+    0.0: "79a48ce1eb7b349f4e823f628e57edc0523f6441be09165ab8db25a7c6a062ed",
+    0.02: "d212dce81e7fc194a03736290786cc371c8794be18f50204cbcd2cc9cd4fe37b",
+    0.05: "1677aa4616b2998201005cf2117cd401d0203bbe0a483aeb47ae7d0a037c9c40",
+    0.1: "27d9d2756e1333d817e6466568b2fb0dde3efaa5a8f1a5c5b69f2d842ef4e607",
+    0.25: "3d038019f5fbf255d2c2ba79c4d0e3d5d2501716d347631eb61cca6b6b1e67da",
+    0.5: "28330f33123d57aa9d4ab450f2295e80089448e5479bd3e61fb3ee4884291107",
+    0.75: "40a378e11125d0b189729620de62e46025089489e6cd913b7896ef3d9010a657",
+    1.0: "0cbe8e2100adaf1f8eab65d6a679e022bc204435bbeef720595a31a1e696d386",
+}
+
+
 @test
-def test_deterministic_full_runs():
-    for beta in (0.0, 0.5):
+def test_reference_hashes_every_beta():
+    for beta in rs.BETAS:
         a, _ = run(P, beta, seed=1, n_acq=40)
-        b, _ = run(P, beta, seed=1, n_acq=40)
-        assert a["run_hash"] == b["run_hash"]
         HASHES[f"H_random_r0_Y1_Pphys_b{beta}_s1"] = a["run_hash"]
+        assert a["run_hash"] == REFERENCE[beta], f"beta={beta}: {a['run_hash']}"
+    b, _ = run(P, 0.05, seed=1, n_acq=40)
+    assert b["run_hash"] == REFERENCE[0.05], "not deterministic"
+    assert len(set(REFERENCE.values())) == len(rs.BETAS), "two beta values gave the same run"
+
+
+@test
+def test_expected_improvement_against_quadrature():
+    from scipy import integrate, stats
+    for mu, sd, best in [(0.0, 1.0, 0.5), (1.2, 0.3, 1.0), (-2.0, 0.7, 0.0), (3.0, 2.0, 3.0), (0.4, 1e-3, 0.5)]:
+        ref, _ = integrate.quad(lambda v: max(v - best, 0.0) * stats.norm.pdf(v, mu, sd),
+                                mu - 12 * sd, mu + 12 * sd, points=[best], limit=200)
+        got = float(rs.expected_improvement(np.array([mu]), np.array([sd]), best)[0])
+        assert abs(got - ref) <= 1e-9 + 1e-7 * abs(ref), (mu, sd, best, got, ref)
+    hi = rs.expected_improvement(np.array([1.0, 2.0]), np.array([1.0, 1.0]), 0.0)
+    assert hi[1] > hi[0], "EI must increase with the mean (maximisation)"
+
+
+@test
+def test_selection_rule_matches_logged_ranks():
+    """Recompute step 1 of a beta = 0.25 run from an independent GP fit and the
+    written rule: score = (1 - beta) * rank(EI) + beta * rank(P), ties by hash."""
+    from scipy.stats import rankdata
+    beta = 0.25
+    r, _ = run(P, beta, seed=2, n_acq=1)
+    init = [ids.index(m) for m in r["init"]]
+    cand = [i for i in range(len(ids)) if i not in set(init)]
+    yo = np.array([y[ids[i]] for i in init])
+    gp = rs.fit_gp(Z[init], yo)
+    mu, sd = gp.predict(Z[cand], return_std=True)
+    ei = rs.rsig(rs.expected_improvement(mu, sd, yo.max()), rs.EI_SIG)
+    score = (1 - beta) * rankdata(ei) + beta * rankdata(P[cand])
+    best = max(range(len(cand)), key=lambda j: (score[j], -rs.hkey(SPLIT, ids[cand[j]])))
+    assert r["trajectory"] == [ids[cand[best]]]
+    assert r["steps"][0]["ei_rank"] == rankdata(ei)[best] and r["steps"][0]["prior_rank"] == rankdata(P[cand])[best]
+
+
+@test
+def test_no_collapse_with_near_duplicate_pair():
+    """v1.0 defect: a near-identical pair with different y in the design drove the
+    length-scale to its bound and made EI flat. v1.1 must keep EI informative."""
+    d2 = ((Z[:, None, :] - Z[None, :, :]) ** 2).sum(-1)
+    np.fill_diagonal(d2, np.inf)
+    yv = np.array([y[m] for m in ids])
+    close = np.argwhere(d2 < 0.05 ** 2)
+    i, j = max(((a, b) for a, b in close if a < b), key=lambda ab: abs(yv[ab[0]] - yv[ab[1]]))
+    base = rs.init_design(len(ids), SPLIT, 1)
+    init = [int(i), int(j)] + [k for k in base if k not in (i, j)][:8]
+    orig = rs.init_design
+    rs.init_design = lambda n, split, seed, n_init=rs.N_INIT: init
+    try:
+        r = rs.search(ids, Z, None, rs.Oracle(y), 0.0, SPLIT, 1, n_acq=15)
+    finally:
+        rs.init_design = orig
+    assert all(s["kernel"][1] >= rs.LS_LOWER - 1e-9 for s in r["steps"])
+    assert all(s["ei_top_ties"] < 0.5 * s["n_cand"] for s in r["steps"]), "EI is flat"
 
 
 def twin_pool(eps):
@@ -193,6 +264,16 @@ def test_ei_tie_goes_to_hash_not_prior():
     prior = np.array([1.0 if m == lose else 0.0 for m in sids])      # prior favours the hash loser
     r = rs.search(sids, Zs, prior, rs.Oracle(ys), 0.0, split, 0, n_acq=1)
     assert r["trajectory"] == [win], f"beta=0 tie decided by prior: got {r['trajectory']}"
+    st = r["steps"][0]
+    assert st["ei_top_ties"] == 2 and st["ei_rank"] == st["n_cand"] - 0.5, "tied EI must get the average rank"
+
+
+@test
+def test_standardise():
+    Xs = np.column_stack([np.arange(6.0), np.full(6, 3.0), np.array([1.0, 1, 1, 2, 2, 5]) * 1e3])
+    Zs = rs.standardise(Xs)
+    assert Zs.shape == (6, 2), "constant column must be dropped"
+    assert np.allclose(Zs.mean(0), 0) and np.allclose(Zs.std(0), 1)
 
 
 @test

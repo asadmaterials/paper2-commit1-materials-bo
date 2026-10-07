@@ -1,0 +1,141 @@
+Colab cross-machine check of the v1.1 package (paper2_v1.1_repo.zip)
+Run by the author on Google Colab on 2026-10-06.
+Note: the runtime disconnected after the last test finished and the VM was reset, so the
+log files written by tee were lost. The text below was copied by the author from the
+notebook display (each command, then its output); it was not captured to a file.
+Not recorded: the versions of pymatgen-core, patsy and matminer (pip freeze was not run).
+
+!sha256sum -c SHA256SUMS.txt | grep -c ': OK$'
+!sha256sum -c SHA256SUMS.txt 2>&1 | grep -v ': OK$'
+
+
+71
+
+%cd /content/p2/code
+!pip install -q -r requirements-build.txt -r requirements-analysis.txt
+!python --version
+!pip show numpy scipy scikit-learn pandas pymatgen statsmodels | grep -E "^(Name|Version)"
+
+/content/p2/code
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 62.1/62.1 kB 2.6 MB/s eta 0:00:00
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 91.2/91.2 kB 4.5 MB/s eta 0:00:00
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 55.6/55.6 kB 3.4 MB/s eta 0:00:00
+  Preparing metadata (setup.py) ... done
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 16.6/16.6 MB 75.4 MB/s eta 0:00:00
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 35.2/35.2 MB 26.3 MB/s eta 0:00:00
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 12.3/12.3 MB 68.2 MB/s eta 0:00:00
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 5.3/5.3 MB 81.2 MB/s eta 0:00:00
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 825.8/825.8 kB 28.8 MB/s eta 0:00:00
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 4.6/4.6 MB 62.2 MB/s eta 0:00:00
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 8.9/8.9 MB 79.6 MB/s eta 0:00:00
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 62.6/62.6 kB 2.8 MB/s eta 0:00:00
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 332.3/332.3 kB 14.7 MB/s eta 0:00:00
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.0/1.0 MB 39.5 MB/s eta 0:00:00
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 73.1/73.1 kB 3.9 MB/s eta 0:00:00
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 962.5/962.5 kB 39.0 MB/s eta 0:00:00
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 60.1/60.1 kB 3.6 MB/s eta 0:00:00
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 331.1/331.1 kB 18.2 MB/s eta 0:00:00
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 118.1/118.1 kB 5.8 MB/s eta 0:00:00
+  Building wheel for bibtexparser (setup.py) ... done
+ERROR: pip's dependency resolver does not currently take into account all the packages that are installed. This behaviour is the source of the following dependency conflicts.
+google-colab 1.0.0 requires pandas==2.2.3, but you have pandas 2.3.3 which is incompatible.
+google-colab 1.0.0 requires requests==2.32.4, but you have requests 2.34.2 which is incompatible.
+numba 0.61.2 requires numpy<2.3,>=1.24, but you have numpy 2.4.4 which is incompatible.
+Python 3.13.16
+Name: numpy
+Version: 2.4.4
+Name: scipy
+Version: 1.17.1
+Name: scikit-learn
+Version: 1.8.0
+Name: pandas
+Version: 2.3.3
+Name: pymatgen
+Version: 2026.9.24
+Name: statsmodels
+Version: 0.15.0
+
+%cd /content/p2/code
+!bash rebuild_v1_1.sh ../data/derived 2>&1 | tee /content/log_1_rebuild.txt
+
+/content/p2/code
+== environment
+Python 3.13.16
+numpy 2.4.4
+scipy 1.17.1
+pymatgen 2026.9.24
+== 1/2 splits (r0-r2 must equal splits_v1.csv)
+== 2/2 priors and history-side alignment (scores on r0-r2 must equal priors_v2)
+== compare
+MATCH     splits_v2.csv
+MATCH     priors_v3_primary.csv
+MATCH     priors_v3_sens1_no_Pm_Tc.csv
+MATCH     priors_v3_unscreened.csv
+MATCH     alignment_v3_primary.csv
+MATCH     alignment_v3_sens1_no_Pm_Tc.csv
+MATCH     alignment_v3_unscreened.csv
+ALL MATCH
+
+
+!OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 python test_engine.py ../data/derived/features_v2_primary.csv ../data/derived/pool_v1.csv ../data/derived/splits_v1.csv ../data/derived/elemental_reference_springer2005_v1.csv ../data/derived/priors_v2_primary.csv 2>&1 | tee /content/log_2_engine.txt
+
+PASS   test_init_depends_only_on_split_and_seed  (0.7s)
+PASS   test_beta0_ignores_prior  (2.2s)
+PASS   test_beta1_is_prior_order_with_hash_ties  (0.0s)
+PASS   test_tie_break_all_equal_prior  (0.0s)
+PASS   test_wrong_prior_picks_bottom  (0.0s)
+PASS   test_engine_reads_only_queried_y  (1.4s)
+PASS   test_candidates_valid  (2.8s)
+PASS   test_prior_mixing_changes_path  (2.0s)
+PASS   test_guard_refuses_discovery_without_registration  (0.0s)
+PASS   test_rejects_invalid_inputs  (0.0s)
+PASS   test_reference_hashes_every_beta  (24.5s)
+PASS   test_expected_improvement_against_quadrature  (0.0s)
+PASS   test_selection_rule_matches_logged_ranks  (0.1s)
+PASS   test_no_collapse_with_near_duplicate_pair  (3.0s)
+PASS   test_ei_tie_goes_to_hash_not_prior  (0.1s)
+PASS   test_standardise  (0.0s)
+PASS   test_ei_rounding_makes_near_ties_exact  (0.2s)
+
+17/17 passed
+RUNHASH H_random_r0_Y1_Pphys_b0.0_s1 79a48ce1eb7b349f4e823f628e57edc0523f6441be09165ab8db25a7c6a062ed
+RUNHASH H_random_r0_Y1_Pphys_b0.02_s1 d212dce81e7fc194a03736290786cc371c8794be18f50204cbcd2cc9cd4fe37b
+RUNHASH H_random_r0_Y1_Pphys_b0.05_s1 1677aa4616b2998201005cf2117cd401d0203bbe0a483aeb47ae7d0a037c9c40
+RUNHASH H_random_r0_Y1_Pphys_b0.1_s1 27d9d2756e1333d817e6466568b2fb0dde3efaa5a8f1a5c5b69f2d842ef4e607
+RUNHASH H_random_r0_Y1_Pphys_b0.25_s1 3d038019f5fbf255d2c2ba79c4d0e3d5d2501716d347631eb61cca6b6b1e67da
+RUNHASH H_random_r0_Y1_Pphys_b0.5_s1 28330f33123d57aa9d4ab450f2295e80089448e5479bd3e61fb3ee4884291107
+RUNHASH H_random_r0_Y1_Pphys_b0.75_s1 40a378e11125d0b189729620de62e46025089489e6cd913b7896ef3d9010a657
+RUNHASH H_random_r0_Y1_Pphys_b1.0_s1 0cbe8e2100adaf1f8eab65d6a679e022bc204435bbeef720595a31a1e696d386
+
+
+!python test_analysis.py 2>&1 | tee /content/log_3_analysis.txt
+
+ok  1  7,020 fabricated records load and validate (3,000 + 2,640 + 1,380)
+ok  2  outcomes match an independent implementation (336 runs), incl. S_blind
+ok  3  planted trajectories: T99, T95, N5, AUC, S_dis, R_dis and chance recall as constructed
+ok  4  split-level t-test (Satterthwaite df) equals a second implementation and SciPy's Welch df;
+       bootstrap equals a loop implementation
+ok  5  Holm and the H1 decision; H2 rule: gate, benefit, adjusted safety level, three-way state
+ok  6  full analysis: deterministic; the run table (120 sampled rows over all 15 cells), H1, H2,
+       H3, frontier, never-inspected splits, manipulation check, percentile bins, family table,
+       engine health, budget sensitivity and random reference all match an independent recomputation
+ok  7  fallbacks are read from the pilot check; top 10% for one objective and Delta N5 for the other
+       reach the run table, H2, the frontier, the manipulation check and the budget table
+ok  8  validation rejects 22 kinds of broken record set (engine, registration, environment,
+       values, design, hashes, step log, pool size, repeats, manifest, missing / extra / duplicate runs)
+ALL ANALYSIS TESTS PASSED
+
+
+!python test_pilot_pipeline.py 2>&1 | tee /content/log_4_pilot.txt
+
+ok  1  confirmatory stage refuses unless the analysis hash is in the decision log and the pilot check passed
+ok  2  pilot stage: 80 records, beta = 0 only, both objectives, seeds 10-11, DOI and threads recorded
+ok  3  resuming keeps existing records; the engine refuses to overwrite a record
+ok  4  pilot checks run per objective; 5 drawn runs reproduce their run hash
+ok  5  a pilot check without the reruns unlocks nothing; the analysis reads its fallbacks from
+       the pilot check; an unreadable record stops the batch and is left untouched
+ok  6  a tampered pilot record is rejected
+ALL PILOT PIPELINE TESTS PASSED
+
+
+
