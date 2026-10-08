@@ -59,7 +59,8 @@ handbook PDF. The handbook is not distributed here; a reader without the same
 PDF file should treat `data/derived/elemental_reference_springer2005_v1.csv`
 as the verifiable input. Set `PYTHONUTF8=1` where the default encoding is not
 UTF-8. `SHA256SUMS.txt` lists the current files; Appendix A of the v1.0 plan
-verifies at commit `21bc34d`, where `docs/DECISION_LOG.md` had 28 entries.
+verifies at commit `21bc34d`, where `docs/DECISION_LOG.md` had 28 entries;
+Appendix A of the v1.1 plan verifies at commit `4ba3afa`, where it had 36.
 The confirmatory stage is started with `run_batch.py --stage confirmatory
 --decision-log ../docs/DECISION_LOG.md --pilot-check ../runs/pilot/pilot_check.json`.
 
