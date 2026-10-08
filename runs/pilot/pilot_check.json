@@ -1,0 +1,51 @@
+{
+ "n_runs": 80,
+ "check1_S_dis": {
+  "Y1": {
+   "n_runs": 40,
+   "mean_hits": {
+    "P_H_fixed": 11.3,
+    "P_phys_fixed": 4.4
+   },
+   "required": 2.0,
+   "pass": true
+  },
+  "Y2": {
+   "n_runs": 40,
+   "mean_hits": {
+    "P_H_fixed": 9.225,
+    "P_H_matched_Y2": 9.5,
+    "P_phys_fixed": 7.5,
+    "P_phys_matched_Y2": 5.05
+   },
+   "required": 2.0,
+   "pass": true
+  }
+ },
+ "check2_T99": {
+  "Y1": {
+   "censored_fraction": 0.075,
+   "required_below": 0.5,
+   "pass": true
+  },
+  "Y2": {
+   "censored_fraction": 0.075,
+   "required_below": 0.5,
+   "pass": true
+  }
+ },
+ "check3_engine": {
+  "identical_initial_designs": true,
+  "records_validated": true,
+  "reruns_done": true,
+  "rerun_hash_match": {
+   "primary_chemsys_r3_D_Y2_P0_b0.0_s11.json": true,
+   "primary_random_r8_D_Y1_P0_b0.0_s11.json": true,
+   "primary_chemsys_r1_D_Y1_P0_b0.0_s10.json": true,
+   "primary_random_r2_D_Y2_P0_b0.0_s10.json": true,
+   "primary_random_r0_D_Y1_P0_b0.0_s10.json": true
+  },
+  "pass": true
+ },
+ "fallbacks": []
+}
