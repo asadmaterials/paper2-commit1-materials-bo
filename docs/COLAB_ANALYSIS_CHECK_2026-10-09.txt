@@ -1,0 +1,61 @@
+Cross-machine check of the registered analysis (analyze_runs.py v1.1) on Colab, run by the author on 2026-10-09
+from commit 9e86a2801a78aae409b24dfa3389ea057b8e31e8. Below: the author's copy of the notebook display
+(cells: setup, analysis, hash comparison against results/summary.json), verbatim.
+
+----- notebook display -----
+Mounted at /content/drive
+/content
+/content/paper2-commit1-materials-bo
+9e86a2801a78aae409b24dfa3389ea057b8e31e8
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 62.1/62.1 kB 794.6 kB/s eta 0:00:00
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 91.2/91.2 kB 2.6 MB/s eta 0:00:00
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 16.6/16.6 MB 60.8 MB/s eta 0:00:00
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 35.2/35.2 MB 21.8 MB/s eta 0:00:00
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 8.9/8.9 MB 72.7 MB/s eta 0:00:00
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 12.3/12.3 MB 58.8 MB/s eta 0:00:00
+ERROR: pip's dependency resolver does not currently take into account all the packages that are installed. This behaviour is the source of the following dependency conflicts.
+google-colab 1.0.0 requires pandas==2.2.3, but you have pandas 2.3.3 which is incompatible.
+numba 0.61.2 requires numpy<2.3,>=1.24, but you have numpy 2.4.4 which is incompatible.
+CHECKSUMS OK
+/content/paper2-commit1-materials-bo/code
+
+
+analysed 7020 runs; fallbacks: top 10% [], N5 []; outputs in /content/drive/MyDrive/paper2/results_colab
+  ee23e612d798b3d0  budget_sensitivity.csv
+  1a446021a45d389f  engine_health.csv
+  1f48afb4ed7222f9  family.csv
+  062c2a9044620d77  frontier.csv
+  c73c47a1caf7e507  h1_coverage_loss.csv
+  ca6cd4a3b76be788  h2_beneficial_and_safe.csv
+  a1d502f554d6b138  h2_detail.csv
+  f75d476dfefce4e7  h3_alignment.csv
+  d5c290e27f3a8c01  manipulation_check.csv
+  aa5a8fe6c6e6d72b  new_splits_only.csv
+  f65a5b7479b154cf  random_search_reference.csv
+  9c7a86a75ee9d097  recall_by_prior_percentile.csv
+  38308201c8fbbe8d  run_outcomes.csv
+
+
+3.13.16 7020 8592e2b369eb8458
+MATCH budget_sensitivity.csv
+MATCH engine_health.csv
+MATCH family.csv
+MATCH frontier.csv
+MATCH h1_coverage_loss.csv
+MATCH h2_beneficial_and_safe.csv
+MATCH h2_detail.csv
+MATCH h3_alignment.csv
+MATCH manipulation_check.csv
+MATCH new_splits_only.csv
+MATCH random_search_reference.csv
+MATCH recall_by_prior_percentile.csv
+MATCH run_outcomes.csv
+GLMM file (iterative fit): differs (expected to be possible)
+----- end of notebook display -----
+
+Mixed-model file from Colab: docs/COLAB_ANALYSIS_CHECK_2026-10-09_glmm_fixed_effects.csv
+(SHA-256 20298b3d5e147ef5acb129b24695b39bfe7939fffd09a14f836d044909e3a442; committed results/glmm_fixed_effects.csv
+has f0f18a1b9770f01786775a1861a03596ae854cbd193c02711cd368075af9e3b1).
+Comparison by the assistant: same 96 rows (6 cells x 16 terms) in the same order; 95 of 96 posterior means and
+all 96 posterior SDs identical at the 3 decimals written; one mean differs by 0.001
+(Y2:P_phys_matched_Y2, beta 0.25 x pctl: 0.338 in results/, 0.339 on Colab); no sign differs.
