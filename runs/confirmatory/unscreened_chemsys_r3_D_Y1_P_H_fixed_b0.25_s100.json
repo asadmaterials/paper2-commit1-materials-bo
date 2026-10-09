@@ -1,0 +1,623 @@
+{
+ "engine_version": "1.1",
+ "run": {
+  "universe": "unscreened",
+  "split": "chemsys_r3",
+  "side": "D",
+  "objective": "Y1",
+  "prior": "P_H_fixed",
+  "beta": 0.25,
+  "seed": 100,
+  "pool_size": 3297
+ },
+ "registered": "10.5281/zenodo.23118101",
+ "inputs": {
+  "features": "4039be545a0ac4c8665fd625c69b788680f387269c9749ca40625dd742a1dd26",
+  "pool": "fb5873dabdc0cf462d6678fe47be30ab2f21e8fb659604cb208cecd3162f9540",
+  "splits": "6b6142ddeaeab2a9be14a58e88c34f4e506cdefd739101c3ac1208d945b673e1",
+  "priors": "8e2e8398129128234fa9ba6a2c3ecdc70a65a4ccc09203b0d31eacdbc783fb5b"
+ },
+ "script_sha256": "6d900ad9af93c38019e8be2ee7e0a3037e82d1e649678f8f4dededa41c36f13a",
+ "env": {
+  "python": "3.13.16",
+  "numpy": "2.4.4",
+  "scipy": "1.17.1",
+  "scikit-learn": "1.8.0",
+  "threads": {
+   "OMP_NUM_THREADS": "1",
+   "OPENBLAS_NUM_THREADS": "1",
+   "MKL_NUM_THREADS": "1"
+  }
+ },
+ "init": [
+  "mp-aaacdyzc",
+  "mp-aaaaarrn",
+  "mp-aaaaaduf",
+  "mp-aaaabhpt",
+  "mp-aaaabdri",
+  "mp-aaaabfnc",
+  "mp-aaaaayfr",
+  "mp-aaaaaeaz",
+  "mp-aaaabihf",
+  "mp-aaacdorm"
+ ],
+ "trajectory": [
+  "mp-aaabxfnb",
+  "mp-aaabxizz",
+  "mp-aaabxiys",
+  "mp-aaabgiac",
+  "mp-aaaaacje",
+  "mp-aaaaacug",
+  "mp-aaaaaquw",
+  "mp-aaabkfhw",
+  "mp-aaaabtpb",
+  "mp-aaacdyrm",
+  "mp-aaaaabzj",
+  "mp-aaacfixp",
+  "mp-aaabglvq",
+  "mp-aaabxghw",
+  "mp-aaaaacll",
+  "mp-aaabxgom",
+  "mp-aaabxjtt",
+  "mp-aaacdier",
+  "mp-aaacdsqz",
+  "mp-aaaaaqym",
+  "mp-aaacdllo",
+  "mp-aaaabtmn",
+  "mp-aaaaaddu",
+  "mp-aaaaaqzq",
+  "mp-aaacdltp",
+  "mp-aaabxjbl",
+  "mp-aaaaarwt",
+  "mp-aaaabtqw",
+  "mp-aaaaaayz",
+  "mp-aaacpkqd",
+  "mp-aaacdlnb",
+  "mp-aaabxcak",
+  "mp-aaacdlji",
+  "mp-aaabxdrp",
+  "mp-aaaaaefw",
+  "mp-aaaaaqzp",
+  "mp-aaaaabev",
+  "mp-aaabxcio",
+  "mp-aaacdllt",
+  "mp-aaaaadjx"
+ ],
+ "y_init": [
+  19.866,
+  32.565,
+  108.178,
+  25.46,
+  52.781,
+  4.893,
+  48.812,
+  38.727,
+  27.031,
+  57.973
+ ],
+ "y_trajectory": [
+  108.004,
+  99.781,
+  113.398,
+  146.834,
+  70.648,
+  129.905,
+  141.455,
+  102.391,
+  97.776,
+  92.953,
+  68.158,
+  72.293,
+  93.792,
+  112.266,
+  31.661,
+  113.185,
+  83.607,
+  104.672,
+  121.472,
+  114.202,
+  146.125,
+  194.892,
+  150.309,
+  189.314,
+  184.629,
+  157.989,
+  214.386,
+  103.854,
+  110.344,
+  198.555,
+  193.1,
+  173.524,
+  226.427,
+  203.512,
+  86.605,
+  182.715,
+  122.068,
+  112.353,
+  156.327,
+  20.99
+ ],
+ "steps": [
+  {
+   "t": 1,
+   "material_id": "mp-aaabxfnb",
+   "ei_rank": 3270.0,
+   "prior_rank": 3209.0,
+   "n_cand": 3287,
+   "kernel": [
+    1.438589,
+    13.624486
+   ],
+   "ei_top_ties": 1
+  },
+  {
+   "t": 2,
+   "material_id": "mp-aaabxizz",
+   "ei_rank": 3257.0,
+   "prior_rank": 3274.0,
+   "n_cand": 3286,
+   "kernel": [
+    1.54321,
+    18.83567
+   ],
+   "ei_top_ties": 1
+  },
+  {
+   "t": 3,
+   "material_id": "mp-aaabxiys",
+   "ei_rank": 3282.0,
+   "prior_rank": 3147.0,
+   "n_cand": 3285,
+   "kernel": [
+    2.076728,
+    26.669009
+   ],
+   "ei_top_ties": 1
+  },
+  {
+   "t": 4,
+   "material_id": "mp-aaabgiac",
+   "ei_rank": 3282.0,
+   "prior_rank": 3130.0,
+   "n_cand": 3284,
+   "kernel": [
+    2.409072,
+    32.788086
+   ],
+   "ei_top_ties": 1
+  },
+  {
+   "t": 5,
+   "material_id": "mp-aaaaacje",
+   "ei_rank": 3269.0,
+   "prior_rank": 3102.0,
+   "n_cand": 3283,
+   "kernel": [
+    2.553836,
+    32.391291
+   ],
+   "ei_top_ties": 1
+  },
+  {
+   "t": 6,
+   "material_id": "mp-aaaaacug",
+   "ei_rank": 3281.0,
+   "prior_rank": 3086.0,
+   "n_cand": 3282,
+   "kernel": [
+    1.137261,
+    15.199003
+   ],
+   "ei_top_ties": 1
+  },
+  {
+   "t": 7,
+   "material_id": "mp-aaaaaquw",
+   "ei_rank": 3224.0,
+   "prior_rank": 3205.0,
+   "n_cand": 3281,
+   "kernel": [
+    1.123807,
+    16.824237
+   ],
+   "ei_top_ties": 1
+  },
+  {
+   "t": 8,
+   "material_id": "mp-aaabkfhw",
+   "ei_rank": 3223.0,
+   "prior_rank": 3271.0,
+   "n_cand": 3280,
+   "kernel": [
+    1.357963,
+    17.9778
+   ],
+   "ei_top_ties": 1
+  },
+  {
+   "t": 9,
+   "material_id": "mp-aaaabtpb",
+   "ei_rank": 3234.0,
+   "prior_rank": 3200.0,
+   "n_cand": 3279,
+   "kernel": [
+    1.413279,
+    18.658494
+   ],
+   "ei_top_ties": 1
+  },
+  {
+   "t": 10,
+   "material_id": "mp-aaacdyrm",
+   "ei_rank": 3269.0,
+   "prior_rank": 3064.0,
+   "n_cand": 3278,
+   "kernel": [
+    1.256691,
+    16.491771
+   ],
+   "ei_top_ties": 1
+  },
+  {
+   "t": 11,
+   "material_id": "mp-aaaaabzj",
+   "ei_rank": 3245.0,
+   "prior_rank": 3223.0,
+   "n_cand": 3277,
+   "kernel": [
+    1.092492,
+    13.956571
+   ],
+   "ei_top_ties": 1
+  },
+  {
+   "t": 12,
+   "material_id": "mp-aaacfixp",
+   "ei_rank": 3253.0,
+   "prior_rank": 3089.0,
+   "n_cand": 3276,
+   "kernel": [
+    1.130296,
+    13.790156
+   ],
+   "ei_top_ties": 1
+  },
+  {
+   "t": 13,
+   "material_id": "mp-aaabglvq",
+   "ei_rank": 3272.0,
+   "prior_rank": 3028.0,
+   "n_cand": 3275,
+   "kernel": [
+    1.098686,
+    13.373407
+   ],
+   "ei_top_ties": 1
+  },
+  {
+   "t": 14,
+   "material_id": "mp-aaabxghw",
+   "ei_rank": 3212.0,
+   "prior_rank": 3240.0,
+   "n_cand": 3274,
+   "kernel": [
+    1.029725,
+    9.985833
+   ],
+   "ei_top_ties": 1
+  },
+  {
+   "t": 15,
+   "material_id": "mp-aaaaacll",
+   "ei_rank": 3272.0,
+   "prior_rank": 2931.0,
+   "n_cand": 3273,
+   "kernel": [
+    1.077848,
+    10.41836
+   ],
+   "ei_top_ties": 1
+  },
+  {
+   "t": 16,
+   "material_id": "mp-aaabxgom",
+   "ei_rank": 3265.0,
+   "prior_rank": 3181.0,
+   "n_cand": 3272,
+   "kernel": [
+    1.030096,
+    8.294676
+   ],
+   "ei_top_ties": 1
+  },
+  {
+   "t": 17,
+   "material_id": "mp-aaabxjtt",
+   "ei_rank": 3231.0,
+   "prior_rank": 3071.0,
+   "n_cand": 3271,
+   "kernel": [
+    1.074701,
+    8.97318
+   ],
+   "ei_top_ties": 1
+  },
+  {
+   "t": 18,
+   "material_id": "mp-aaacdier",
+   "ei_rank": 3210.0,
+   "prior_rank": 3118.0,
+   "n_cand": 3270,
+   "kernel": [
+    1.04627,
+    7.798451
+   ],
+   "ei_top_ties": 1
+  },
+  {
+   "t": 19,
+   "material_id": "mp-aaacdsqz",
+   "ei_rank": 3233.0,
+   "prior_rank": 3123.0,
+   "n_cand": 3269,
+   "kernel": [
+    1.060746,
+    7.925021
+   ],
+   "ei_top_ties": 1
+  },
+  {
+   "t": 20,
+   "material_id": "mp-aaaaaqym",
+   "ei_rank": 3255.0,
+   "prior_rank": 3084.0,
+   "n_cand": 3268,
+   "kernel": [
+    1.087865,
+    8.112146
+   ],
+   "ei_top_ties": 1
+  },
+  {
+   "t": 21,
+   "material_id": "mp-aaacdllo",
+   "ei_rank": 3252.0,
+   "prior_rank": 3134.0,
+   "n_cand": 3267,
+   "kernel": [
+    1.102511,
+    8.334392
+   ],
+   "ei_top_ties": 1
+  },
+  {
+   "t": 22,
+   "material_id": "mp-aaaabtmn",
+   "ei_rank": 3265.0,
+   "prior_rank": 3223.0,
+   "n_cand": 3266,
+   "kernel": [
+    1.100554,
+    8.377066
+   ],
+   "ei_top_ties": 1
+  },
+  {
+   "t": 23,
+   "material_id": "mp-aaaaaddu",
+   "ei_rank": 3245.0,
+   "prior_rank": 3222.0,
+   "n_cand": 3265,
+   "kernel": [
+    1.063795,
+    7.793219
+   ],
+   "ei_top_ties": 1
+  },
+  {
+   "t": 24,
+   "material_id": "mp-aaaaaqzq",
+   "ei_rank": 3206.0,
+   "prior_rank": 3036.0,
+   "n_cand": 3264,
+   "kernel": [
+    1.058175,
+    8.11868
+   ],
+   "ei_top_ties": 1
+  },
+  {
+   "t": 25,
+   "material_id": "mp-aaacdltp",
+   "ei_rank": 3260.0,
+   "prior_rank": 3196.0,
+   "n_cand": 3263,
+   "kernel": [
+    1.084331,
+    8.185959
+   ],
+   "ei_top_ties": 1
+  },
+  {
+   "t": 26,
+   "material_id": "mp-aaabxjbl",
+   "ei_rank": 3259.0,
+   "prior_rank": 3137.0,
+   "n_cand": 3262,
+   "kernel": [
+    1.050326,
+    8.558267
+   ],
+   "ei_top_ties": 1
+  },
+  {
+   "t": 27,
+   "material_id": "mp-aaaaarwt",
+   "ei_rank": 3238.0,
+   "prior_rank": 3119.0,
+   "n_cand": 3261,
+   "kernel": [
+    1.046339,
+    8.853072
+   ],
+   "ei_top_ties": 1
+  },
+  {
+   "t": 28,
+   "material_id": "mp-aaaabtqw",
+   "ei_rank": 3245.0,
+   "prior_rank": 3148.0,
+   "n_cand": 3260,
+   "kernel": [
+    1.033406,
+    8.607712
+   ],
+   "ei_top_ties": 1
+  },
+  {
+   "t": 29,
+   "material_id": "mp-aaaaaayz",
+   "ei_rank": 3197.0,
+   "prior_rank": 3202.0,
+   "n_cand": 3259,
+   "kernel": [
+    1.029063,
+    8.403297
+   ],
+   "ei_top_ties": 1
+  },
+  {
+   "t": 30,
+   "material_id": "mp-aaacpkqd",
+   "ei_rank": 3258.0,
+   "prior_rank": 2932.0,
+   "n_cand": 3258,
+   "kernel": [
+    1.033641,
+    8.436214
+   ],
+   "ei_top_ties": 1
+  },
+  {
+   "t": 31,
+   "material_id": "mp-aaacdlnb",
+   "ei_rank": 3256.0,
+   "prior_rank": 2915.0,
+   "n_cand": 3257,
+   "kernel": [
+    1.004452,
+    8.847121
+   ],
+   "ei_top_ties": 1
+  },
+  {
+   "t": 32,
+   "material_id": "mp-aaabxcak",
+   "ei_rank": 3245.0,
+   "prior_rank": 2915.0,
+   "n_cand": 3256,
+   "kernel": [
+    1.000179,
+    9.21238
+   ],
+   "ei_top_ties": 1
+  },
+  {
+   "t": 33,
+   "material_id": "mp-aaacdlji",
+   "ei_rank": 3255.0,
+   "prior_rank": 2844.0,
+   "n_cand": 3255,
+   "kernel": [
+    1.012729,
+    9.424653
+   ],
+   "ei_top_ties": 1
+  },
+  {
+   "t": 34,
+   "material_id": "mp-aaabxdrp",
+   "ei_rank": 3254.0,
+   "prior_rank": 2829.0,
+   "n_cand": 3254,
+   "kernel": [
+    0.96812,
+    9.256452
+   ],
+   "ei_top_ties": 1
+  },
+  {
+   "t": 35,
+   "material_id": "mp-aaaaaefw",
+   "ei_rank": 3251.0,
+   "prior_rank": 2693.0,
+   "n_cand": 3253,
+   "kernel": [
+    0.968453,
+    9.548249
+   ],
+   "ei_top_ties": 1
+  },
+  {
+   "t": 36,
+   "material_id": "mp-aaaaaqzp",
+   "ei_rank": 3228.0,
+   "prior_rank": 2791.0,
+   "n_cand": 3252,
+   "kernel": [
+    0.938754,
+    9.32053
+   ],
+   "ei_top_ties": 1
+  },
+  {
+   "t": 37,
+   "material_id": "mp-aaaaabev",
+   "ei_rank": 3142.0,
+   "prior_rank": 3001.0,
+   "n_cand": 3251,
+   "kernel": [
+    0.937816,
+    9.410047
+   ],
+   "ei_top_ties": 1
+  },
+  {
+   "t": 38,
+   "material_id": "mp-aaabxcio",
+   "ei_rank": 3233.0,
+   "prior_rank": 2574.0,
+   "n_cand": 3250,
+   "kernel": [
+    0.962519,
+    9.442091
+   ],
+   "ei_top_ties": 1
+  },
+  {
+   "t": 39,
+   "material_id": "mp-aaacdllt",
+   "ei_rank": 3202.0,
+   "prior_rank": 2669.0,
+   "n_cand": 3249,
+   "kernel": [
+    0.961672,
+    9.358384
+   ],
+   "ei_top_ties": 1
+  },
+  {
+   "t": 40,
+   "material_id": "mp-aaaaadjx",
+   "ei_rank": 3053.0,
+   "prior_rank": 2635.0,
+   "n_cand": 3248,
+   "kernel": [
+    0.974379,
+    9.482331
+   ],
+   "ei_top_ties": 1
+  }
+ ],
+ "run_hash": "5ccf16c7bfa8dd5683986c14c197e0bc1f7ed402190966141e2c16243157205f"
+}
