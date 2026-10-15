@@ -59,7 +59,8 @@ plt.rcParams.update({"font.size": 8, "axes.titlesize": 8.5, "axes.labelsize": 8,
 
 def save(fig, name):
     for ext in ("pdf", "png"):
-        fig.savefig(OUT / f"{name}.{ext}", dpi=300, bbox_inches="tight")
+        fig.savefig(OUT / f"{name}.{ext}", dpi=300, bbox_inches="tight",
+                    metadata={"CreationDate": None} if ext == "pdf" else None)   # no timestamp: byte-reproducible
     plt.close(fig)
 
 
