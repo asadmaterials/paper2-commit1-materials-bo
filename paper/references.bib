@@ -1,0 +1,299 @@
+% references.bib -- Paper 2. Every entry was checked against a primary record (publisher, Crossref, arXiv,
+% OpenReview, PMLR/JMLR, PubMed or the official book/software page) in the reference passes of 2026-10-13/14.
+% Remaining caveats are noted in the entry. Do not add an entry without checking it the same way.
+
+% ---------------- this study's own records ----------------
+@misc{asad2026registration,
+  author = {Asad, Muhammad},
+  title  = {Registered analysis plan, version 1.1: The efficiency--coverage trade-off of scientific priors in {B}ayesian search},
+  year   = {2026}, publisher = {Zenodo}, doi = {10.5281/zenodo.23118101}, howpublished = {\url{https://doi.org/10.5281/zenodo.23118101}},
+  note   = {Amends version 1.0, doi:10.5281/zenodo.23073511}
+}
+@misc{asad2026registrationv1,
+  author = {Asad, Muhammad},
+  title  = {Registered analysis plan, version 1.0: The efficiency--coverage trade-off of scientific priors in {B}ayesian search},
+  year   = {2026}, publisher = {Zenodo}, doi = {10.5281/zenodo.23073511}, howpublished = {\url{https://doi.org/10.5281/zenodo.23073511}}
+}
+@misc{asad2026snapshot,
+  author = {Asad, Muhammad},
+  title  = {Materials {P}roject database 2026.04.13: elasticity and summary documents (raw snapshot)},
+  year   = {2026}, publisher = {Zenodo}, doi = {10.5281/zenodo.22978221}, howpublished = {\url{https://doi.org/10.5281/zenodo.22978221}}
+}
+
+% ---------------- prior-guided and expert-informed BO ----------------
+@inproceedings{souza2021bopro,
+  author = {Souza, Artur and Nardi, Luigi and Oliveira, Leonardo B. and Olukotun, Kunle and Lindauer, Marius and Hutter, Frank},
+  title = {{B}ayesian Optimization with a Prior for the Optimum},
+  booktitle = {Machine Learning and Knowledge Discovery in Databases. Research Track (ECML PKDD 2021)},
+  series = {Lecture Notes in Computer Science}, volume = {12977}, pages = {265--296}, publisher = {Springer}, year = {2021},
+  doi = {10.1007/978-3-030-86523-8_17}
+}
+@inproceedings{hvarfner2022pibo,
+  author = {Hvarfner, Carl and Stoll, Danny and Souza, Artur and Lindauer, Marius and Hutter, Frank and Nardi, Luigi},
+  title = {$\pi${BO}: Augmenting Acquisition Functions with User Beliefs for {B}ayesian Optimization},
+  booktitle = {International Conference on Learning Representations (ICLR)}, year = {2022},
+  url = {https://openreview.net/forum?id=MMAeCXIa89}
+}
+@inproceedings{hvarfner2024colabo,
+  author = {Hvarfner, Carl and Hutter, Frank and Nardi, Luigi},
+  title = {A General Framework for User-Guided {B}ayesian Optimization},
+  booktitle = {The Twelfth International Conference on Learning Representations (ICLR)}, year = {2024},
+  url = {https://openreview.net/forum?id=NjU0jtXcYn}
+}
+@misc{fehring2025dynabo,
+  author = {Fehring, Lukas and Wever, Marcel and Splieth{\"o}ver, Maximilian and Hennig, Leona and Wachsmuth, Henning and Lindauer, Marius},
+  title = {Dynamic Priors in {B}ayesian Optimization for Hyperparameter Optimization},
+  year = {2025}, eprint = {2511.02570}, archivePrefix = {arXiv}, note = {Preprint, arXiv:2511.02570v3}
+}
+@article{ramachandran2020warping,
+  author = {Ramachandran, Anil and Gupta, Sunil and Rana, Santu and Li, Cheng and Venkatesh, Svetha},
+  title = {Incorporating expert prior in {B}ayesian optimisation via space warping},
+  journal = {Knowledge-Based Systems}, volume = {195}, pages = {105663}, year = {2020}, doi = {10.1016/j.knosys.2020.105663}
+}
+@article{guayhottin2025alphapibo,
+  author = {Guay-Hottin, Rose and Kardassevitch, Lison and Pham, Hugo and Lajoie, Guillaume and Bonizzato, Marco},
+  title = {Robust prior-biased acquisition function for human-in-the-loop {B}ayesian optimization},
+  journal = {Knowledge-Based Systems}, volume = {311}, pages = {113039}, year = {2025}, doi = {10.1016/j.knosys.2025.113039}
+}
+@inproceedings{xu2024principled,
+  author = {Xu, Wenjie and Adachi, Masaki and Jones, Colin N. and Osborne, Michael A.},
+  title = {Principled {B}ayesian Optimization in Collaboration with Human Experts},
+  booktitle = {Advances in Neural Information Processing Systems (NeurIPS)}, year = {2024}, doi = {10.52202/079017-3308}
+}
+@article{dudley2026putting,
+  author = {Dudley, John and Oulasvirta, Antti and Chan, Liwei and Kristensson, Per Ola},
+  title = {Putting the Human Back in the Loop: A Review of Interactive {B}ayesian Optimization},
+  journal = {ACM Computing Surveys}, year = {2026}, doi = {10.1145/3805804},
+  note = {Published online; volume and issue not yet assigned (re-check before submission)}
+}
+
+% ---------------- physics-, knowledge- and LLM-informed priors ----------------
+@article{ziatdinov2022physics,
+  author = {Ziatdinov, Maxim A. and Ghosh, Ayana and Kalinin, Sergei V.},
+  title = {Physics makes the difference: {B}ayesian optimization and active learning via augmented {G}aussian process},
+  journal = {Machine Learning: Science and Technology}, volume = {3}, number = {1}, pages = {015003}, year = {2022},
+  doi = {10.1088/2632-2153/ac4baa}
+}
+@article{khatamsaz2023physics,
+  author = {Khatamsaz, Danial and Neuberger, Raymond and Roy, Arunabha M. and Zadeh, Sina Hossein and Otis, Richard and Arr{\'o}yave, Raymundo},
+  title = {A physics informed bayesian optimization approach for material design: application to {NiTi} shape memory alloys},
+  journal = {npj Computational Materials}, volume = {9}, number = {1}, pages = {221}, year = {2023}, doi = {10.1038/s41524-023-01173-7}
+}
+@article{aoki2026explicitly,
+  author = {Aoki, Hiroshi and Miyao, Tomoyuki},
+  title = {Explicitly Incorporating Prior Knowledge into {B}ayesian Optimization for Materials Design},
+  journal = {ACS Omega}, volume = {11}, number = {29}, pages = {43492--43509}, year = {2026}, doi = {10.1021/acsomega.6c02171}
+}
+@inproceedings{liu2024llambo,
+  author = {Liu, Tennison and Astorga, Nicol{\'a}s and Seedat, Nabeel and van der Schaar, Mihaela},
+  title = {Large Language Models to Enhance {B}ayesian Optimization},
+  booktitle = {International Conference on Learning Representations (ICLR)}, year = {2024},
+  eprint = {2402.03921}, archivePrefix = {arXiv}
+}
+@inproceedings{kristiadi2024sober,
+  author = {Kristiadi, Agustinus and Strieth-Kalthoff, Felix and Skreta, Marta and Poupart, Pascal and Aspuru-Guzik, Al{\'a}n and Pleiss, Geoff},
+  title = {A Sober Look at {LLM}s for Material Discovery: Are They Actually Good for {B}ayesian Optimization Over Molecules?},
+  booktitle = {Proceedings of the 41st International Conference on Machine Learning},
+  series = {Proceedings of Machine Learning Research}, volume = {235}, pages = {25603--25622}, year = {2024}, publisher = {PMLR},
+  url = {https://proceedings.mlr.press/v235/kristiadi24a.html}
+}
+@misc{chen2026evidencegated,
+  author = {Chen, Jiangyu and Ban, Yi and Fu, Tianfan},
+  title = {{CALIPER}: Evidence-Gated {LLM} Prior Layers for Multi-Objective {B}ayesian Optimization},
+  year = {2026}, eprint = {2606.01730}, archivePrefix = {arXiv}, note = {Preprint, arXiv:2606.01730v2}
+}
+
+% ---------------- materials sequential learning, benchmarks, bias ----------------
+@article{lookman2019active,
+  author = {Lookman, Turab and Balachandran, Prasanna V. and Xue, Dezhen and Yuan, Ruihao},
+  title = {Active learning in materials science with emphasis on adaptive sampling using uncertainties for targeted design},
+  journal = {npj Computational Materials}, volume = {5}, number = {1}, pages = {21}, year = {2019}, doi = {10.1038/s41524-019-0153-8}
+}
+@article{liang2021benchmarking,
+  author = {Liang, Qiaohao and Gongora, Aldair E. and Ren, Zekun and Tiihonen, Armi and Liu, Zhe and Sun, Shijing and Deneault, James R. and Bash, Daniil and Mekki-Berrada, Flore and Khan, Saif A. and Hippalgaonkar, Kedar and Maruyama, Benji and Brown, Keith A. and Fisher, John and Buonassisi, Tonio},
+  title = {Benchmarking the performance of {B}ayesian optimization across multiple experimental materials science domains},
+  journal = {npj Computational Materials}, volume = {7}, pages = {188}, year = {2021}, doi = {10.1038/s41524-021-00656-9}
+}
+@article{rohr2020benchmarking,
+  author = {Rohr, Brian and Stein, Helge S. and Guevarra, Dan and Wang, Yu and Haber, Joel A. and Aykol, Muratahan and Suram, Santosh K. and Gregoire, John M.},
+  title = {Benchmarking the acceleration of materials discovery by sequential learning},
+  journal = {Chemical Science}, volume = {11}, number = {10}, pages = {2696--2706}, year = {2020}, doi = {10.1039/C9SC05999G}
+}
+@article{borg2023quantifying,
+  author = {Borg, Christopher K. H. and Muckley, Eric S. and Nyby, Clara and Saal, James E. and Ward, Logan and Mehta, Apurva and Meredig, Bryce},
+  title = {Quantifying the performance of machine learning models in materials discovery},
+  journal = {Digital Discovery}, volume = {2}, number = {2}, pages = {327--338}, year = {2023}, doi = {10.1039/D2DD00113F}
+}
+@article{meredig2018loco,
+  author = {Meredig, Bryce and Antono, Erin and Church, Carena and Hutchinson, Maxwell and Ling, Julia and Paradiso, Sean and Blaiszik, Ben and Foster, Ian and Gibbons, Brenna and Hattrick-Simpers, Jason and Mehta, Apurva and Ward, Logan},
+  title = {Can machine learning identify the next high-temperature superconductor? {E}xamining extrapolation performance for materials discovery},
+  journal = {Molecular Systems Design \& Engineering}, volume = {3}, number = {5}, pages = {819--825}, year = {2018}, doi = {10.1039/C8ME00012C}
+}
+@article{kauwe2020extraordinary,
+  author = {Kauwe, Steven K. and Graser, Jake and Murdock, Ryan and Sparks, Taylor D.},
+  title = {Can machine learning find extraordinary materials?},
+  journal = {Computational Materials Science}, volume = {174}, pages = {109498}, year = {2020}, doi = {10.1016/j.commatsci.2019.109498}
+}
+@article{jia2019anthropogenic,
+  author = {Jia, Xiwen and Lynch, Allyson and Huang, Yuheng and Danielson, Matthew and Lang'at, Immaculate and Milder, Alexander and Ruby, Aaron E. and Wang, Hao and Friedler, Sorelle A. and Norquist, Alexander J. and Schrier, Joshua},
+  title = {Anthropogenic biases in chemical reaction data hinder exploratory inorganic synthesis},
+  journal = {Nature}, volume = {573}, number = {7773}, pages = {251--255}, year = {2019}, doi = {10.1038/s41586-019-1540-5}
+}
+
+% ---------------- data, descriptors, elastic properties ----------------
+@article{jain2013materialsproject,
+  author = {Jain, Anubhav and Ong, Shyue Ping and Hautier, Geoffroy and Chen, Wei and Richards, William Davidson and Dacek, Stephen and Cholia, Shreyas and Gunter, Dan and Skinner, David and Ceder, Gerbrand and Persson, Kristin A.},
+  title = {Commentary: The {M}aterials {P}roject: A materials genome approach to accelerating materials innovation},
+  journal = {APL Materials}, volume = {1}, number = {1}, pages = {011002}, year = {2013}, doi = {10.1063/1.4812323}
+}
+@article{dejong2015charting,
+  author = {de Jong, Maarten and Chen, Wei and Angsten, Thomas and Jain, Anubhav and Notestine, Randy and Gamst, Anthony and Sluiter, Marcel and Krishna Ande, Chaitanya and van der Zwaag, Sybrand and Plata, Jose J. and Toher, Cormac and Curtarolo, Stefano and Ceder, Gerbrand and Persson, Kristin A. and Asta, Mark},
+  title = {Charting the complete elastic properties of inorganic crystalline compounds},
+  journal = {Scientific Data}, volume = {2}, pages = {150009}, year = {2015}, doi = {10.1038/sdata.2015.9}
+}
+@article{ward2016magpie,
+  author = {Ward, Logan and Agrawal, Ankit and Choudhary, Alok and Wolverton, Christopher},
+  title = {A general-purpose machine learning framework for predicting properties of inorganic materials},
+  journal = {npj Computational Materials}, volume = {2}, pages = {16028}, year = {2016}, doi = {10.1038/npjcompumats.2016.28}
+}
+@article{ward2018matminer,
+  author = {Ward, Logan and Dunn, Alexander and Faghaninia, Alireza and Zimmermann, Nils E. R. and Bajaj, Saurabh and Wang, Qi and Montoya, Joseph and Chen, Jiming and Bystrom, Kyle and Dylla, Maxwell and Chard, Kyle and Asta, Mark and Persson, Kristin A. and Snyder, G. Jeffrey and Foster, Ian and Jain, Anubhav},
+  title = {Matminer: An open source toolkit for materials data mining},
+  journal = {Computational Materials Science}, volume = {152}, pages = {60--69}, year = {2018}, doi = {10.1016/j.commatsci.2018.05.018}
+}
+@article{ong2013pymatgen,
+  author = {Ong, Shyue Ping and Richards, William Davidson and Jain, Anubhav and Hautier, Geoffroy and Kocher, Michael and Cholia, Shreyas and Gunter, Dan and Chevrier, Vincent L. and Persson, Kristin A. and Ceder, Gerbrand},
+  title = {Python Materials Genomics (pymatgen): A robust, open-source python library for materials analysis},
+  journal = {Computational Materials Science}, volume = {68}, pages = {314--319}, year = {2013}, doi = {10.1016/j.commatsci.2012.10.028}
+}
+@book{martienssen2005handbook,
+  editor = {Martienssen, Werner and Warlimont, Hans},
+  title = {Springer Handbook of Condensed Matter and Materials Data}, series = {Springer Handbooks},
+  publisher = {Springer}, address = {Berlin, Heidelberg}, year = {2005}, doi = {10.1007/3-540-30437-1}
+}
+@article{hill1952,
+  author = {Hill, R.}, title = {The Elastic Behaviour of a Crystalline Aggregate},
+  journal = {Proceedings of the Physical Society. Section A}, volume = {65}, number = {5}, pages = {349--354}, year = {1952},
+  doi = {10.1088/0370-1298/65/5/307}
+}
+@article{feng2018elastic,
+  author = {Feng, Bojun and Widom, Michael},
+  title = {Elastic stability and lattice distortion of refractory high entropy alloys},
+  journal = {Materials Chemistry and Physics}, volume = {210}, pages = {309--314}, year = {2018}, doi = {10.1016/j.matchemphys.2017.06.038}
+}
+
+% ---------------- BO and GP methods, software ----------------
+@article{jones1998ego,
+  author = {Jones, Donald R. and Schonlau, Matthias and Welch, William J.},
+  title = {Efficient Global Optimization of Expensive Black-Box Functions},
+  journal = {Journal of Global Optimization}, volume = {13}, number = {4}, pages = {455--492}, year = {1998}, doi = {10.1023/A:1008306431147}
+}
+@article{shahriari2016human,
+  author = {Shahriari, Bobak and Swersky, Kevin and Wang, Ziyu and Adams, Ryan P. and de Freitas, Nando},
+  title = {Taking the Human Out of the Loop: A Review of {B}ayesian Optimization},
+  journal = {Proceedings of the IEEE}, volume = {104}, number = {1}, pages = {148--175}, year = {2016}, doi = {10.1109/JPROC.2015.2494218}
+}
+@book{garnett2023bo,
+  author = {Garnett, Roman}, title = {Bayesian Optimization},
+  publisher = {Cambridge University Press}, year = {2023}, doi = {10.1017/9781108348973}
+}
+@book{rasmussen2006gpml,
+  author = {Rasmussen, Carl Edward and Williams, Christopher K. I.},
+  title = {Gaussian Processes for Machine Learning}, publisher = {MIT Press}, address = {Cambridge, MA}, year = {2006},
+  doi = {10.7551/mitpress/3206.001.0001}
+}
+@article{pedregosa2011sklearn,
+  author = {Pedregosa, Fabian and Varoquaux, Ga{\"e}l and Gramfort, Alexandre and Michel, Vincent and Thirion, Bertrand and Grisel, Olivier and Blondel, Mathieu and Prettenhofer, Peter and Weiss, Ron and Dubourg, Vincent and Vanderplas, Jake and Passos, Alexandre and Cournapeau, David and Brucher, Matthieu and Perrot, Matthieu and Duchesnay, {\'E}douard},
+  title = {Scikit-learn: Machine Learning in {P}ython},
+  journal = {Journal of Machine Learning Research}, volume = {12}, pages = {2825--2830}, year = {2011},
+  url = {https://jmlr.org/papers/v12/pedregosa11a.html}
+}
+@inproceedings{seabold2010statsmodels,
+  author = {Seabold, Skipper and Perktold, Josef},
+  title = {Statsmodels: Econometric and Statistical Modeling with {P}ython},
+  booktitle = {Proceedings of the 9th Python in Science Conference (SciPy 2010)}, pages = {92--96}, year = {2010},
+  doi = {10.25080/Majora-92bf1922-011}
+}
+
+% ---------------- statistics and research practice ----------------
+@article{holm1979,
+  author = {Holm, Sture}, title = {A Simple Sequentially Rejective Multiple Test Procedure},
+  journal = {Scandinavian Journal of Statistics}, volume = {6}, number = {2}, pages = {65--70}, year = {1979},
+  url = {https://www.jstor.org/stable/4615733}
+}
+@article{satterthwaite1946,
+  author = {Satterthwaite, F. E.}, title = {An Approximate Distribution of Estimates of Variance Components},
+  journal = {Biometrics Bulletin}, volume = {2}, number = {6}, pages = {110--114}, year = {1946}, doi = {10.2307/3002019}
+}
+% satterthwaite1946: pages 110--114 confirmed on the JSTOR scan (stable/3002019), 2026-10-18.
+@article{royston2013rmst,
+  author = {Royston, Patrick and Parmar, Mahesh K. B.},
+  title = {Restricted mean survival time: an alternative to the hazard ratio for the design and analysis of randomized trials with a time-to-event outcome},
+  journal = {BMC Medical Research Methodology}, volume = {13}, pages = {152}, year = {2013}, doi = {10.1186/1471-2288-13-152}
+}
+@article{walker2011equivalence,
+  author = {Walker, Esteban and Nowacki, Amy S.}, title = {Understanding Equivalence and Noninferiority Testing},
+  journal = {Journal of General Internal Medicine}, volume = {26}, number = {2}, pages = {192--196}, year = {2011}, doi = {10.1007/s11606-010-1513-8}
+}
+@misc{fda2016noninferiority,
+  author = {{U.S. Food and Drug Administration}},
+  title = {Non-Inferiority Clinical Trials to Establish Effectiveness: Guidance for Industry}, year = {2016},
+  howpublished = {\url{https://www.fda.gov/media/78504/download}}
+}
+@inproceedings{bouthillier2021variance,
+  author = {Bouthillier, Xavier and Delaunay, Pierre and Bronzi, Mirko and Trofimov, Assya and Nichyporuk, Brennan and Szeto, Justin and Mohammadi Sepahvand, Nazanin and Raff, Edward and Madan, Kanika and Voleti, Vikram and Ebrahimi Kahou, Samira and Michalski, Vincent and Arbel, Tal and Pal, Chris and Varoquaux, Ga{\"e}l and Vincent, Pascal},
+  title = {Accounting for Variance in Machine Learning Benchmarks},
+  booktitle = {Proceedings of Machine Learning and Systems}, volume = {3}, pages = {747--769}, year = {2021}
+}
+@article{nosek2018preregistration,
+  author = {Nosek, Brian A. and Ebersole, Charles R. and DeHaven, Alexander C. and Mellor, David T.},
+  title = {The preregistration revolution},
+  journal = {Proceedings of the National Academy of Sciences}, volume = {115}, number = {11}, pages = {2600--2606}, year = {2018},
+  doi = {10.1073/pnas.1708274114}
+}
+@inproceedings{bertinetto2021preface,
+  author = {Bertinetto, Luca and Henriques, Jo{\~a}o F. and Albanie, Samuel and Paganini, Michela and Varol, G{\"u}l},
+  title = {Preface}, booktitle = {NeurIPS 2020 Workshop on Pre-registration in Machine Learning},
+  series = {Proceedings of Machine Learning Research}, volume = {148}, year = {2021}, publisher = {PMLR},
+  url = {https://proceedings.mlr.press/v148/bertinetto21a.html}
+}
+
+@inproceedings{qu2026dynmeanbo,
+  author = {Qu, Chongqi and Liu, Meiqin and Lan, Jian and Dong, Shanling and Liu, Zhunga},
+  title = {Incorporating Expert Priors into {B}ayesian Optimization via Dynamic Mean Decay},
+  booktitle = {International Conference on Learning Representations (ICLR)},
+  year = {2026}
+}
+
+% ---------------- novelty sweep 2026-10-15; titles, authors and venues confirmed on the primary records 2026-10-18 ----------------
+@inproceedings{cisse2024hypbo,
+  author = {Ciss{\'e}, Abdoulatif and Evangelopoulos, Xenophon and Carruthers, Sam and Gusev, Vladimir V. and Cooper, Andrew I.},
+  title = {{HypBO}: Accelerating Black-Box Scientific Experiments Using Experts' Hypotheses},
+  booktitle = {Proceedings of the Thirty-Third International Joint Conference on Artificial Intelligence ({IJCAI}-24)},
+  pages = {3881--3889}, year = {2024}
+}
+@misc{hennig2026psh,
+  author = {Hennig, Leona and Brandt, Jasmin and Fehring, Lukas and Hammer, Barbara and Lindauer, Marius and Wever, Marcel},
+  title = {Provably Reduced Sample Cost in Prior-Guided Hyperparameter Optimization},
+  year = {2026}, eprint = {2606.04866}, archivePrefix = {arXiv}, note = {Preprint, arXiv:2606.04866}
+}
+@misc{weichert2025lessismore,
+  author = {Weichert, Dorina and Ernis, Gunar and Worthmann, Marvin and Ryzko, Peter and Seifert, Lukas},
+  title = {When Less is More: A Story of Failing {B}ayesian Optimization Due to Additional Expert Knowledge},
+  year = {2025}, eprint = {2511.16230}, archivePrefix = {arXiv}, note = {Preprint, arXiv:2511.16230}
+}
+@article{chitturi2024bax,
+  author = {Chitturi, Sathya R. and Ramdas, Akash and Wu, Yue and Rohr, Brian and Ermon, Stefano and Dionne, Jennifer and da Jornada, Felipe H. and Dunne, Mike and Tassone, Christopher and Neiswanger, Willie and Ratner, Daniel},
+  title = {Targeted materials discovery using {B}ayesian algorithm execution},
+  journal = {npj Computational Materials}, volume = {10}, pages = {156}, year = {2024}, doi = {10.1038/s41524-024-01326-2}
+}
+@misc{jiang2026rangeaware,
+  author = {Jiang, Shengli and Wu, Jason and Schroeder, Charles M. and Webb, Michael A.},
+  title = {Range-Aware {B}ayesian Optimization for Discovering Diverse Designs within Target Property Windows},
+  year = {2026}, eprint = {2606.11574}, archivePrefix = {arXiv}, note = {Preprint, arXiv:2606.11574}
+}
+@article{iwasaki2026llmspace,
+  author = {Iwasaki, Yuma and Toyama, Ryo and Tamura, Ryo and Matsuda, Shoichi and Sakuraba, Yuya and Kotsugi, Masato and Igarashi, Yasuhiko and Sodeyama, Keitaro},
+  title = {Large-language-model-driven adaptive search space definition for autonomous closed-loop materials exploration},
+  journal = {Communications Materials}, volume = {7}, pages = {202}, year = {2026}, doi = {10.1038/s43246-026-01304-9}
+}

@@ -1,0 +1,12 @@
+# Builds the Supplementary Information before the article, so that the article's "Supplementary Table S..." and
+# "Supplementary Note S..." references (package xr-hyper, \externaldocument) resolve. The guard stops the inner build of
+# one document from triggering the other again.
+add_cus_dep('tex', 'aux', 0, 'makeexternaldocument');
+sub makeexternaldocument {
+    return 0 if $ENV{XR_INNER_BUILD};
+    if (!($root_filename eq $_[0])) {
+        local $ENV{XR_INNER_BUILD} = 1;
+        system("latexmk -cd -pdf \"$_[0]\"");
+    }
+    return 0;
+}

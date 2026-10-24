@@ -1,0 +1,245 @@
+% Methods -- condensed from the registered plan (docs/PREREGISTRATION.md, v1.1, doi:10.5281/zenodo.23118101).
+% Design facts below are taken from the plan and the data manifests; results are never quoted here.
+\section{Methods}\label{sec:methods}
+
+The study was run under a registered analysis plan\cite{asad2026registrationv1,asad2026registration}. This section condenses it; the plan,
+the decision log and all code are in the repository (Data and code availability).
+
+\subsection{Data and benchmark}\label{sec:data}
+All data come from one snapshot of the Materials Project (MP) database, version 2026.04.13\cite{jain2013materialsproject,asad2026snapshot}:
+all 13,283 elasticity documents\cite{dejong2015charting} and their summary documents. Materials were kept if the elasticity calculation
+succeeded and was not deprecated, the material has exactly one summary document, MP classifies the material as metallic, it contains at least two elements, none of them H, B, C, N,
+O, F, Si, P, S, Cl, Se, Br, I, At or a noble gas, its shear modulus $G_{\mathrm{VRH}}$ is finite and positive, and its elastic
+tensor is mechanically (Born) stable, that is, all eigenvalues of the symmetrised $6\times6$ elastic tensor in Voigt notation are
+strictly positive. This leaves 4,711 structures. The element list is the scope definition of the registration: it removes
+compounds of the nonmetals and of the lighter metalloids, so that the pool consists of compounds of metals and heavier metalloids
+such as Ge and Sb; it is a choice of scope, not a claim that every excluded compound is non-metallic. (The stability test was applied to MP's rounded elastic
+tensor; this admits 2 structures and rejects 19 on round-off, a defect disclosed in the registration and left unchanged.) The \emph{primary universe} keeps the 3,550 of them, with 60
+elements, whose elements all have screened reference data for the elemental-modulus prior (Section~\ref{sec:priors}); two
+sensitivity universes drop Pm and Tc (3,378 structures) or the reference screen (4,711 structures, historical priors only). No
+thermodynamic-stability filter is applied: \R{bench/snap/primary_theoretical_pct}\% of the primary structures (\R{bench/snap/primary_theoretical}) carry MP's
+\emph{theoretical} flag, and \R{bench/snap/primary_ehull_above_0.1} lie more than 0.1~eV/atom above the convex hull. Two
+objectives are studied: Y1 $=G_{\mathrm{VRH}}$ and Y2 $=E/\rho$, the specific Young's modulus, with
+$E=9KG/(3K+G)$ from the Voigt--Reuss--Hill moduli and $\rho$ the density of the structure. Each material is described by 131
+Magpie composition statistics\cite{ward2016magpie,ward2018matminer}, its density and volume per atom, and a one-hot crystal system. The descriptors
+therefore include properties of the DFT-relaxed structure, so the setting is the screening of already-relaxed candidates. The unit
+of search and of evaluation is a structure (one MP material): the \R{bench/primary_structures} primary structures represent
+\R{bench/primary_compositions} compositions, \R{bench/multi_polymorph_compositions} of them with more than one structure
+(\R{bench/multi_polymorph_structures} structures), and a search may acquire more than one polymorph of a composition.
+
+\subsection{Splits and the information boundary}\label{sec:splits}
+Each search runs on the \emph{discovery} side of a split; the \emph{history} side supplies labelled data to the historical
+prior, and to no other part of the search. There are 20 splits: 10 random splits grouped by composition, so that all polymorphs of
+a composition (MP's reduced composition) lie on one side, and 10 chemical-system splits grouped by MP's chemical system. Each split is drawn independently, once,
+on the 4,711-structure pool: its groups are shuffled with a seed derived from the SHA-256 of the split type and replicate number and
+added to the history side until it holds 30\% of the structures. The split is then restricted to each universe, so that a material
+has the same side in every universe. In the primary universe the history sides hold 1,025--1,103 materials (29--31\%) and the
+discovery pools 2,447--2,525. A search sees the value
+of $y$ only by querying an oracle; every run checks that the oracle log equals the initial design plus the acquisitions.
+
+\subsection{Priors}\label{sec:priors}
+A prior is a score for every discovery material, higher meaning more favoured. Table~\ref{tab:priors} lists the four priors.
+The \emph{historical} prior is minus the Euclidean distance, in descriptor space standardised on the history side, from a
+candidate to the nearest of the top $\lceil0.1\,n_h\rceil$ of the $n_h$ history materials (ties in history order; descriptors with
+zero variance on the history side get unit scale); it uses the labelled history side of the split (1,025--1,103
+materials in the primary universe). The
+\emph{elemental-modulus heuristic prior} is a composition-weighted rule-of-mixtures average of elemental shear moduli, the mean of
+its arithmetic (Voigt-type) and harmonic (Reuss-type) forms, by analogy with Hill's average over crystal orientations\cite{hill1952}
+(compositional averages of elemental moduli are a common reference for alloy moduli\cite{feng2018elastic}); the moduli are taken from the Springer
+Handbook of Condensed Matter and Materials Data\cite{martienssen2005handbook}; it is composition-only, identical for polymorphs,
+and uses no MP outcome data. It is a heuristic ranking, not a model of compound moduli. Elemental values were screened for internal
+consistency, without repair or imputation; the screen removed 1,161 of the 4,711 structures. Each prior has a \emph{fixed} form,
+built for $G$, and, for Y2 only, a \emph{matched} form built for $E/\rho$. This gives six prior--objective cells:
+Y1 $\times$ \{historical, elemental-modulus\} and Y2 $\times$ \{historical, historical-matched, elemental-modulus,
+elemental-modulus-matched\}. For the manipulation check, each prior is also used reversed (its negative).
+
+\begin{table*}[t]
+\centering\small
+\caption{Priors. Every score uses only history-side outcomes or handbook elemental data.}
+\label{tab:priors}
+\begin{tabular}{@{}lp{0.62\linewidth}@{}}
+\toprule
+Prior & Definition \\
+\midrule
+historical (fixed) & $-$distance to the nearest of the top 10\% of history materials ranked by $G$ \\
+historical, matched & as above, ranked by $E/\rho$ (Y2 only) \\
+elemental-modulus (fixed) & $\tfrac12\bigl(\sum_i x_i G_i + 1/\sum_i (x_i/G_i)\bigr)$, $x_i$ atomic fractions, $G_i$ elemental shear moduli \\
+elemental-modulus, matched & the above divided by a volume-additive mixture density $\sum_i x_iM_i/\sum_i(x_iM_i/\rho_i)$ (Y2 only) \\
+reversed & the negative of a prior (manipulation check only) \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+\subsection{Search engine and the prior weight}\label{sec:engine}
+The surrogate is a Gaussian process\cite{rasmussen2006gpml} (scikit-learn 1.8.0\cite{pedregosa2011sklearn}) with a constant
+times Mat\'ern-5/2 kernel with one isotropic length-scale (start 3.0, bounds 3.0--1000 in standardised descriptor units; amplitude
+start 1.0 with scikit-learn's default bounds), $\alpha=10^{-6}$ and targets normalised at every fit. The lower bound was raised from 0.01 in the amendment
+(Section~\ref{sec:registration}): in engine tests on history pools at 0.01, searches whose initial design held a near-duplicate
+pair of candidates collapsed (10 of 12 test runs) and some steps had a flat EI; bounds of 2.0 and 3.0 both removed this, and 3.0
+was chosen as the larger margin because the discovery pools are denser than the history pools tested. The GP is refitted, and its
+hyperparameters re-optimised with two random restarts, after every acquisition. Descriptors are standardised on the whole searched
+pool (every descriptor with non-zero variance, the crystal-system indicators included, is centred and divided by its standard
+deviation, and constant ones are dropped; the historical prior standardises the same way on the history side): the setting is transductive in the descriptors, which are known for every candidate before the search, but never in the
+outcomes. The acquisition function is noiseless expected improvement over the best observed value with no exploration
+offset\cite{jones1998ego}, rounded to 9 significant digits. The prior enters through rank mixing: at every step, the remaining
+candidates are ranked by EI and by $P$ (average ranks, a higher value receiving a higher rank, the EI ranks taken after rounding),
+each receives the score $(1-\beta)\,\mathrm{rank}(\mathrm{EI})+\beta\,\mathrm{rank}(P)$, and the highest score is queried, ties going
+to the smallest $\mathrm{sha256}(\text{split}{:}\text{material})$. At $\beta=0$ this is the maximiser of the rounded EI. The prior weight
+takes eight values, $\beta\in\{0,0.02,0.05,0.1,0.25,0.5,0.75,1\}$; $\beta=0$ never reads the prior, and $\beta=1$ ranks by the prior
+alone without fitting the GP. $\beta$ is a fixed rank weight; unlike the multiplicative weight of
+$\pi$BO-type methods\cite{hvarfner2022pibo} it does not decay, and its values are not comparable to theirs. It is the weight of the prior in this rank-mixing rule, and its practical effect depends on
+the rank distributions. Each run evaluates an initial design of 10 structures drawn uniformly without replacement from the discovery
+pool, with a seed derived from the split and the seed number; it depends only on the split, the seed and the pool, and is therefore
+shared by every arm and both objectives within a universe (each universe has its own designs, so the sensitivity universes are not
+paired with the primary one). It is followed by 40 acquisitions, one at a time. No fallback was needed for a failed GP fit; a failure
+would have stopped the run, and none occurred.
+
+\paragraph{Reproducing the benchmark.} The snapshot is archived\cite{asad2026snapshot}; scripts in the repository acquire it
+(\texttt{pull\_mp.py}), extract and screen the elemental reference (\texttt{extract\_reference.py}), apply the filters above and
+record their counts (\texttt{build\_pool.py}), draw the splits (\texttt{make\_splits\_v2.py}) and compute the priors
+(\texttt{build\_priors\_v3.py}). Two scripts (\texttt{rebuild\_and\_verify.sh} and \texttt{rebuild\_v1\_1.sh}) rebuild every derived data file and compare it
+with its registered SHA-256. All runs
+use single-threaded linear algebra, and every run record carries the engine's hash, its inputs' hashes and its environment.
+
+\subsection{Outcomes}\label{sec:outcomes}
+For a split and objective, the discovery pool $D$ ($n$ materials) is ordered by $y$; $\Stop$ is its top $\lceil0.05n\rceil$
+(123--127 materials in the primary universe) and $S_{\mathrm{top1}}$ its top $\lceil0.01n\rceil$ (25--26).
+
+\paragraph{Efficiency.} The \emph{sequential} $\Tnn$ of a run is the smallest $t$ such that acquisition $a_t$ is in
+$S_{\mathrm{top1}}$, and 41 if none of the 40 acquisitions is. It counts acquisitions only: a top-1\% material in the initial design
+does not count, and the search must find another. Because the initial design is shared by all arms of a block, an initial-design
+hit is the same in every arm; the sequential measure compares what the arms' own acquisitions find (a post hoc check that counts an
+initial-design hit as time zero is reported in Section~\ref{sec:robust}). A value of 41 means ``not found within the horizon'', so the mean of $\Tnn$
+over runs is a restricted mean with horizon 41. The efficiency gain at weight $\beta$ is $\Delta\Tnn(\beta)=\Tnn(0)-\Tnn(\beta)$,
+paired on split, seed and initial design: the reduction in restricted mean sequential $\Tnn$, in acquisitions. It is not a
+reduction in the time to discovery of every run. Capping at 41 makes an arm with more runs without a hit look faster than it
+would without the cap, so where those shares differ greatly between arms the restricted difference must be read with them
+(Section~\ref{sec:robust}).
+
+\paragraph{Coverage.} $\Sdis(P)$ is the half of $\Stop$, $\lceil|\Stop|/2\rceil$ materials (62--64), with the lowest scores under
+the cell's prior $P$, ties in $P$ being broken by the hash key of Section~\ref{sec:engine}. (Ties at the boundary of $\Sdis$ occur
+only for the elemental-modulus prior on Y1, in \R{bench/sdis_tie_splits/Y1:P_phys_fixed} of the 20 splits and for at most
+\R{bench/sdis_tie_max/Y1:P_phys_fixed} materials.) For a run with initial design $I$, $\Rdis$ is the fraction of $\Sdis\setminus I$ found among the 40
+acquisitions, and the coverage loss is $L(\beta)=\Rdis(0)-\Rdis(\beta)$, paired as above. $\Sdis$ is a prior-specific stress
+test: it asks whether weighting a prior costs the search the good materials that this prior disfavours. Because it is selected on
+low prior score, some loss at high $\beta$ is built into it, and recall of $\Sdis$ is compared within a cell, never across priors.
+The definition was fixed during the exploratory phase, after an earlier one (the top-5\% materials below the pool's median prior
+score) proved empty for the elemental-modulus prior on discovery-side data (decision-log entries 15--16). Taking half of $\Stop$ gives
+a set of the same size for every prior and split, whereas a threshold on the prior's percentile gives a set whose size depends on
+the prior: the earlier definition was empty for the elemental-modulus prior, and $\Sblind$ below holds on average from
+\R{frontier/primary/Y1:P_phys_fixed/0/S_blind_mean_size} to \R{frontier/primary/Y2:P_phys_fixed/0/S_blind_mean_size} materials per
+run, depending on the cell.
+As a registered secondary measure, the \emph{absolute blind spot} $\Sblind(P)$ is the set of $\Stop$ members whose prior percentile in $D$ is below 0.80, where the
+percentile of a material is its average rank under $P$, minus 0.5, divided by $n$. The chance recall, $40/(n-10)$, is the exact expected recall of 40 acquisitions drawn uniformly
+without replacement from the $n-10$ candidates that remain after the initial design, for any target set with the initial design
+removed.
+
+\paragraph{Other outcomes.} $N_5$ (the number of $\Stop$ members acquired), the area under the best-so-far quantile curve,
+recall by prior-percentile bin ([0, 0.5), [0.5, 0.8), [0.8, 0.9), [0.9, 0.95), [0.95, 1]), and engine-health statistics (the share
+of steps whose top-EI tie group holds more than half of the candidates, and the share with the length-scale within 0.1\% of its
+lower bound) were registered as secondary or descriptive outcomes.
+
+\subsection{Statistical analysis}\label{sec:stats}
+\paragraph{Estimator and interval.} For a run-level quantity, such as $\Delta\Tnn$ or $L$, the split mean is the mean over the
+three seeds of a split, and the estimate is the mean of the 20 split means. Split type is a fixed stratum: with $v_r$ and $v_c$ the
+sample variances of the 10 random and the 10 chemical-system split means, the standard error is $\sqrt{(v_r+v_c)/40}$, and the
+reference distribution is Student's $t$ with Satterthwaite degrees of freedom\cite{satterthwaite1946}
+$(v_r+v_c)^2/\bigl((v_r^2+v_c^2)/9\bigr)$, between 9 and 18. Intervals are two-sided at 95\% unless stated otherwise. The effective sample size of every test is the 20 split means, not the
+60 runs: the three seeds of a split vary only the initial design. The estimand is the equal-weighted mean of the two split types'
+expectations.
+
+\paragraph{Sampling model.} The pool of materials is fixed. What is random is the partition of the pool into history and
+discovery sides and the initial design within a partition; given both, the search is deterministic. The 20 splits are independent draws from the partition distribution
+of each type, each with its own seed, and within a split the three seeds are independent draws of the initial design. Given the
+pool, the 20 split means are therefore independent, although different splits share materials: overlap between discovery pools
+is a property of the fixed population being partitioned, not a dependence between the draws. The estimand is accordingly the
+expected outcome over random partitions and initial designs of \emph{this} pool, and the intervals describe that variation. They
+do not describe the variation that would come from a different pool of materials, a different database or a different property
+family; that generalisation is a question of scope (Section~\ref{sec:discussion}), not one the test can answer. With a fixed 18
+degrees of freedom the test rejects a true null too often when the two split types differ in between-split variance; the
+Satterthwaite form was adopted in the registration for this reason. Nominal coverage also assumes that the analysis was fixed
+before the partitions were drawn. That holds for splits r3--r9; the outcome definitions and hypotheses were developed after the
+discovery sides of r0--r2 had been inspected (Section~\ref{sec:registration}), which is why the results are also reported on
+r3--r9 alone. As an alternative uncertainty procedure, a hierarchical bootstrap (10 splits resampled with replacement within each split type, then 3
+seeds within each drawn split; $B=10{,}000$) is reported beside every $t$ interval as descriptive. It was the confirmatory test of version~1.0 and was replaced because, in
+the registration's simulations of that design (three splits per type), its false-positive rate was 0.020--0.035 at a nominal
+0.0042; the ten-split design was not simulated for it, so its reliability here is not known.
+
+\paragraph{H1 (confirmatory).} For each of the six cells and $\beta\in\{0.25,0.5\}$, $H_0\colon \mathbb{E}[L(\beta)]\le0$ is tested
+against $\mathbb{E}[L(\beta)]>0$ with the one-sided split-level $t$ test, and the 12 $p$-values are Holm-adjusted\cite{holm1979} at
+familywise $\alpha=0.05$.
+
+\paragraph{H2 (confirmatory decision rule).} A cell is \emph{applicable} if the one-sided lower 95\% bound of
+$\mathbb{E}[\Rdis(0)-\text{chance}]$ is above zero. For $\beta\in\{0.02,0.05,0.1,0.25,0.5,0.75\}$, a weight is \emph{beneficial} if
+the one-sided lower 95\% bound of $\mathbb{E}[\Delta\Tnn(\beta)]$ is above zero, and \emph{safe} if the one-sided upper bound, at level
+$1-0.05/6$, of $\mathbb{E}[L(\beta)-0.2\,\Rdis(0)]$ is below zero: that is, if the search demonstrably loses less than 20\% of the
+baseline's recall of $\Sdis$. The safety level makes the statement ``at least one of the six weights is safe'' wrong with
+probability at most 0.05 within a cell when every weight truly loses 20\% or more. The beneficial bound is not adjusted, nothing
+is adjusted across cells, and the cells of an objective share their no-prior runs. The 20\% margin is a judgement fixed before
+any result; the rule recomputed with 10\% and 25\% was registered as descriptive. H2 is reported as the set of beneficial and safe
+weights per cell, which may be empty. The rule thus controls false declarations of safety, not of the joint call: with the
+beneficial bound unadjusted across six weights, the probability of a false beneficial-and-safe call in a cell is not controlled. A
+post hoc version with the beneficial bound also at level $1-0.05/6$, which bounds that probability by 0.10, is reported beside the
+registered result (decision-log entry 44). Table~\ref{tab:errors} summarises what each analysis controls.
+
+\paragraph{H3 (exploratory).} For each cell, the history-side Spearman correlation between prior and objective (out-of-fold for
+the historical prior) is set against the gain at $\beta=0.5$; Kendall's $\tau$ over the six cells is reported without a test.
+
+\paragraph{Secondary and sensitivity analyses.} The frontier at all eight weights was registered as the primary descriptive
+result. Registered as secondary or descriptive: recall of $\Sblind$ and recall by prior-percentile bin; engine health; the
+analytic random-search reference; budgets of 10, 20 and 30 acquisitions ($\Tnn$ restricted at $t+1$); the 14 splits r3--r9 alone;
+the reversed-prior manipulation check at $\beta=0.5$; a candidate-level logistic mixed model (secondary; Supplementary
+Note~\ref{S-note:glmm}); and both sensitivity universes. A family-level comparison was registered as exploratory (Supplementary
+Table~\ref{S-tab:s-family}).
+
+\begin{table*}[t]
+\centering\footnotesize
+\caption{Hypotheses, decisions and their error control. Statistical unit throughout: the split mean (20 per cell and weight).}
+\label{tab:errors}
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{@{}p{0.15\linewidth}p{0.17\linewidth}p{0.2\linewidth}p{0.2\linewidth}p{0.22\linewidth}@{}}
+\toprule
+Analysis & Cells, weights & Bound & Multiplicity & Permitted reading \\
+\midrule
+H1 (confirmatory) & 6 cells $\times$ $\beta\in\{0.25,0.5\}$ & one-sided $t$ test of $L>0$ & Holm over 12 tests, familywise 0.05 & a loss is detected, or not detected (not ``preserved'') \\
+H2 (registered rule) & 6 cells $\times$ 6 weights (0.02--0.75) & beneficial: lower 95\%; safe: upper at $1-0.05/6$ & safety within a cell; none for the joint call or across cells & the set of weights that meet the registered rule \\
+H2, adjusted (post hoc) & as H2 & both bounds at $1-0.05/6$ & joint call within a cell $\le0.10$ & a sensitivity of the H2 sets \\
+Margins 10\%, 25\% & as H2 & as H2 & as H2 & sensitivity to the tolerance \\
+H3 & 6 cells & none (Kendall $\tau$) & none & a hypothesis \\
+Frontier, r3--r9, budgets, universes & all & two-sided 95\% $t$ intervals & none & descriptive \\
+$\Sblind$ interval, censoring, initial design, split type & primary & two-sided 95\% $t$ intervals & none & post hoc, descriptive \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+\subsection{Runs}\label{sec:runs}
+A pilot (primary universe, $\beta=0$ only, so no prior was used; both objectives; 20 splits; seeds 10--11; 80 runs) checked three
+registered feasibility conditions, each with a pre-declared fallback: that $\Sdis$ hits are frequent enough to measure, that
+$\Tnn$ is censored in fewer than half of the runs, and that runs reproduce. All three passed for both objectives, so no fallback
+was used. The confirmatory runs used seeds 100--102 on all 20 splits: 3,000 runs in the primary universe (one no-prior arm per objective, 6 cells $\times$ 7 nonzero weights and 6 reversed-prior arms,
+60 runs each), 2,640 in sensitivity universe~1 (the same without the reversed-prior arms) and 1,380 in sensitivity universe~2 (two
+no-prior arms and 3 historical cells $\times$ 7 weights), 7,020 in total. The analysis program validates every run record before use: the registered engine hash and
+registration DOI, the hashes of all input files, the scikit-learn version, single-threaded settings, the shared initial design,
+the oracle log and the exact set of expected runs listed in the batch manifest.
+Reproducibility was checked computationally: all 80 pilot runs and 60 randomly drawn confirmatory runs reproduced their run hashes
+on a second machine, and the registered analysis reproduced on a second platform (all deterministic outputs identical; the
+iterative mixed-model fit identical to three decimals in 95 of 96 coefficients).
+
+\subsection{Registration, exploratory phase and post hoc analyses}\label{sec:registration}
+The study had two phases. In an exploratory phase, the benchmark, metrics and hypotheses were developed with access to the outcome
+labels of all pools, including the discovery sides of splits r0--r2 of each type; every decision is dated and flagged in a public
+decision log. The analysis plan for the model-driven search arms was then registered (version 1.0\cite{asad2026registrationv1}) and amended once,
+after an independent review and before any such search was run for results (version 1.1\cite{asad2026registration}). The amendment raised the
+GP length-scale bound from 0.01 to 3.0, added the weights 0.02--0.1, replaced 3\,+\,3 splits with 10 seeds by 10\,+\,10 splits with
+3 seeds and a split-level test, redefined H2 and revised the pilot. These changes were decided on simulations and on about 1,500
+searches on history sides, some with the elemental-modulus prior at $\beta=0.02$--0.75, which gave engine-health statistics, top-5\%
+hit counts and, for one reviewer, efficiency contrasts between arms on history pools; no coverage outcome was computed. Because all
+splits partition one pool, those history sides cover most materials of every discovery pool. One accidental discovery
+run made during software testing was deleted unread and its seed retired. The splits r3--r9 were created for version 1.1, and no
+discovery-side outcome of them was computed before registration; their discovery pools, however, overlap 86--88\% with history
+sides used in engine tests and in the review. After the registered analysis, five analyses were added in response to
+reviews of the results and are labelled post hoc wherever they appear: the share of runs without a top-1\% hit, the effect of
+counting an initial-design hit as time zero, an interval for the loss of the absolute blind spot, H2 with an adjusted
+beneficial bound, and the gain and loss within each split type (decision-log entries 42--45; specifications in Supplementary
+Note~\ref{S-note:posthoc}). None changes a registered result; counting an initial-design hit as time zero turns one non-beneficial weight into a
+beneficial one (it is not safe, so no beneficial and safe set changes).

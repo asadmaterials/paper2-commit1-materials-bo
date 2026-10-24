@@ -1,0 +1,224 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Paper 2 in the Digital Discovery (RSC) article template.
+%This is the LaTeX ARTICLE template for RSC journals
+%Copyright The Royal Society of Chemistry 2016
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\documentclass[twoside,twocolumn,9pt]{article}
+\usepackage{extsizes}
+\usepackage[super,sort&compress,comma]{natbib} 
+\usepackage[version=3]{mhchem}
+\usepackage[left=1.5cm, right=1.5cm, top=1.785cm, bottom=2.0cm]{geometry}
+\usepackage{balance}
+\usepackage{mathptmx}
+\usepackage{sectsty}
+\usepackage{graphicx} 
+\usepackage{lastpage}
+\usepackage[format=plain,justification=justified,singlelinecheck=false,font={stretch=1.125,small,sf},labelfont=bf,labelsep=space]{caption}
+\usepackage{float}
+\usepackage{fancyhdr}
+\usepackage{fnpos}
+\usepackage[english]{babel}
+\addto{\captionsenglish}{%
+  \renewcommand{\refname}{Notes and references}
+}
+\usepackage{array}
+\usepackage{droidsans}
+\usepackage{charter}
+\usepackage[T1]{fontenc}
+\usepackage[usenames,dvipsnames]{xcolor}
+\usepackage{setspace}
+\usepackage[compact]{titlesec}
+\usepackage{amsmath,amssymb,booktabs,makecell}
+\usepackage{xr-hyper}
+\usepackage{hyperref}
+%%%Please don't disable any packages in the preamble, as this may cause the template to display incorrectly.%%%
+
+
+\usepackage{epstopdf}%This line makes .eps figures into .pdf - please comment out if not required.
+
+\definecolor{cream}{RGB}{222,217,201}
+
+
+% ---- notation -------------------------------------------------------------------
+\newcommand{\Sdis}{S_{\mathrm{dis}}}
+\newcommand{\Sblind}{S_{\mathrm{blind}}}
+\newcommand{\Stop}{S_{\mathrm{top}}}
+\newcommand{\Rdis}{R_{\mathrm{dis}}}
+\newcommand{\Tnn}{T_{99}}
+\newcommand{\cellA}{Y1/historical}
+\newcommand{\cellB}{Y1/elemental-modulus}
+\newcommand{\cellC}{Y2/historical}
+\newcommand{\cellD}{Y2/historical-matched}
+\newcommand{\cellE}{Y2/elemental-modulus}
+\newcommand{\cellF}{Y2/elemental-modulus-matched}
+\newcommand{\todo}[1]{\par\noindent\fbox{\parbox{\dimexpr\linewidth-2\fboxsep-2\fboxrule}{\small\textcolor{red!60!black}{\textbf{To write:} #1}}}\par}
+% citation still to be added to the bibliography (related-work pass)
+\newcommand{\cn}[1]{\textsuperscript{\textcolor{red!60!black}{[#1]}}}
+% width of a column-wide figure: a fraction of the line here, the full column in the two-column RSC layout
+\newcommand{\colw}[1]{\linewidth}
+% CI helper: \ci{key-prefix} prints "[lo, hi]" from <prefix>_lo / <prefix>_hi
+\newcommand{\ci}[1]{[\R{#1_lo},\,\R{#1_hi}]}
+% table rows (Table 1: H1/H2; Table 2: splits r3--r9)
+\newcommand{\hrow}[2]{#1 & \R{h2base/primary/#2/baseline_R_dis}
+ & \makecell{\R{frontier/primary/#2/0.25/gain}\\[-1pt]{\scriptsize\ci{frontier/primary/#2/0.25/gain}}}
+ & \makecell{\R{frontier/primary/#2/0.25/N5}\\[-1pt]{\scriptsize\ci{frontier/primary/#2/0.25/N5}}}
+ & \makecell{\R{h1/primary/#2/0.25/mean_L}\\[-1pt]{\scriptsize\ci{h1/primary/#2/0.25/ci}}} & \R{h1/primary/#2/0.25/p_holm}
+ & \makecell{\R{frontier/primary/#2/0.5/gain}\\[-1pt]{\scriptsize\ci{frontier/primary/#2/0.5/gain}}}
+ & \makecell{\R{frontier/primary/#2/0.5/N5}\\[-1pt]{\scriptsize\ci{frontier/primary/#2/0.5/N5}}}
+ & \makecell{\R{h1/primary/#2/0.5/mean_L}\\[-1pt]{\scriptsize\ci{h1/primary/#2/0.5/ci}}} & \R{h1/primary/#2/0.5/p_holm} \\}
+\newcommand{\srow}[2]{#1 & \R{bs10/primary/#2} & \R{h2set/primary/#2} & \R{bs25/primary/#2} & \R{posthoc/bs20_adjusted/primary/#2} \\}
+\newcommand{\nrow}[2]{#1
+ & \R{newsplits/primary/#2/0.25/gain} {\scriptsize\ci{newsplits/primary/#2/0.25/gain}}
+ & \R{newsplits/primary/#2/0.25/L} {\scriptsize\ci{newsplits/primary/#2/0.25/L}}
+ & \R{newsplits/primary/#2/0.5/gain} {\scriptsize\ci{newsplits/primary/#2/0.5/gain}}
+ & \R{newsplits/primary/#2/0.5/L} {\scriptsize\ci{newsplits/primary/#2/0.5/L}} \\}
+
+
+\input{numbers}
+\externaldocument[S-]{supplement}
+
+\begin{document}
+
+\pagestyle{fancy}
+\thispagestyle{plain}
+\fancypagestyle{plain}{
+%%%HEADER%%%
+\renewcommand{\headrulewidth}{0pt}
+}
+%%%END OF HEADER%%%
+
+%%%PAGE SETUP - Please do not change any commands within this section%%%
+\makeFNbottom
+\makeatletter
+\renewcommand\LARGE{\@setfontsize\LARGE{15pt}{17}}
+\renewcommand\Large{\@setfontsize\Large{12pt}{14}}
+\renewcommand\large{\@setfontsize\large{10pt}{12}}
+\renewcommand\footnotesize{\@setfontsize\footnotesize{7pt}{10}}
+\makeatother
+
+\renewcommand{\thefootnote}{\fnsymbol{footnote}}
+\renewcommand\footnoterule{\vspace*{1pt}% 
+\color{cream}\hrule width 3.5in height 0.4pt \color{black}\vspace*{5pt}} 
+\setcounter{secnumdepth}{5}
+
+\makeatletter 
+\renewcommand\@biblabel[1]{#1}            
+\renewcommand\@makefntext[1]% 
+{\noindent\makebox[0pt][r]{\@thefnmark\,}#1}
+\makeatother 
+\renewcommand{\figurename}{\small{Fig.}~}
+\sectionfont{\sffamily\Large}
+\subsectionfont{\normalsize}
+\subsubsectionfont{\bf}
+\setstretch{1.125} %In particular, please do not alter this line.
+\setlength{\skip\footins}{0.8cm}
+\setlength{\footnotesep}{0.25cm}
+\setlength{\jot}{10pt}
+\titlespacing*{\section}{0pt}{4pt}{4pt}
+\titlespacing*{\subsection}{0pt}{15pt}{1pt}
+%%%END OF PAGE SETUP%%%
+
+%%%FOOTER%%%
+\fancyfoot{}
+\fancyfoot[LO,RE]{\vspace{-7.1pt}\includegraphics[height=9pt]{head_foot/LF}}
+\fancyfoot[CO]{\vspace{-7.1pt}\hspace{13.2cm}\includegraphics{head_foot/RF}}
+\fancyfoot[CE]{\vspace{-7.2pt}\hspace{-14.2cm}\includegraphics{head_foot/RF}}
+\fancyfoot[RO]{\footnotesize{\sffamily{1--\pageref{LastPage} ~\textbar  \hspace{2pt}\thepage}}}
+\fancyfoot[LE]{\footnotesize{\sffamily{\thepage~\textbar\hspace{3.45cm} 1--\pageref{LastPage}}}}
+\fancyhead{}
+\renewcommand{\headrulewidth}{0pt} 
+\renewcommand{\footrulewidth}{0pt}
+\setlength{\arrayrulewidth}{1pt}
+\setlength{\columnsep}{6.5mm}
+\setlength\bibsep{1pt}
+%%%END OF FOOTER%%%
+
+%%%FIGURE SETUP - please do not change any commands within this section%%%
+\makeatletter 
+\newlength{\figrulesep} 
+\setlength{\figrulesep}{0.5\textfloatsep} 
+
+\newcommand{\topfigrule}{\vspace*{-1pt}% 
+\noindent{\color{cream}\rule[-\figrulesep]{\columnwidth}{1.5pt}} }
+
+\newcommand{\botfigrule}{\vspace*{-2pt}% 
+\noindent{\color{cream}\rule[\figrulesep]{\columnwidth}{1.5pt}} }
+
+\newcommand{\dblfigrule}{\vspace*{-1pt}% 
+\noindent{\color{cream}\rule[-\figrulesep]{\textwidth}{1.5pt}} }
+
+\makeatother
+%%%END OF FIGURE SETUP%%%
+
+%%%TITLE, AUTHORS AND ABSTRACT%%%
+\twocolumn[
+  \begin{@twocolumnfalse}
+{\includegraphics[height=30pt]{head_foot/journal_name}\hfill\raisebox{0pt}[0pt][0pt]{\includegraphics[height=55pt]{head_foot/RSC_LOGO_CMYK}}\\[1ex]
+\includegraphics[width=18.5cm]{head_foot/header_bar}}\par
+\vspace{1em}
+\sffamily
+\begin{tabular}{m{4.5cm} p{13.5cm} }
+
+\includegraphics{head_foot/DOI} & \noindent\LARGE{\textbf{The efficiency--coverage trade-off of scientific priors in Bayesian search: a registered benchmark on metallic multi-element elasticity data$^\dag$}} \\
+\vspace{0.3cm} & \vspace{0.3cm} \\
+
+ & \noindent\large{Muhammad Asad$^{\ast}$} \\
+
+\includegraphics{head_foot/dates} & \noindent\normalsize{\input{abstract}} \\
+
+\end{tabular}
+
+ \end{@twocolumnfalse} \vspace{0.6cm}
+
+  ]
+%%%END OF TITLE, AUTHORS AND ABSTRACT%%%
+
+%%%FONT SETUP - please do not change any commands within this section
+\renewcommand*\rmdefault{bch}\normalfont\upshape
+\rmfamily
+\section*{}
+\vspace{-1cm}
+
+%%%FOOTNOTES%%%
+\footnotetext{\textit{Independent researcher, Taxila, Pakistan. E-mail: \textbf{m.asad.materials@gmail.com}}}
+\footnotetext{\dag~Electronic supplementary information (ESI) available: Supplementary Notes S1--S3 (organisation of the tables,
+specifications of the post hoc analyses, the candidate-level mixed model) and Supplementary Tables S1--S14. See DOI:
+\textbf{[assigned by the journal]}.}
+%%%END OF FOOTNOTES%%%
+
+% run-in paragraph headings are left unnumbered (the template numbers every level)
+\let\rscparagraph\paragraph
+\renewcommand{\paragraph}[1]{\rscparagraph*{#1}}
+
+%%%MAIN TEXT%%%%
+\input{intro}
+
+\input{methods}
+
+\input{results}
+
+\input{discussion}
+
+\section*{Author contributions}
+\input{em_contrib}
+
+\section*{Conflicts of interest}
+There are no conflicts to declare.
+
+\section*{Data availability}
+\input{em_data}
+
+\section*{Statement on AI assistance}
+\input{em_ai}
+
+\section*{Acknowledgements}
+This research received no funding from any source.
+%%%END OF MAIN TEXT%%%
+
+\balance
+
+\renewcommand\refname{References}
+\bibliography{references}
+\bibliographystyle{rsc}
+\end{document}

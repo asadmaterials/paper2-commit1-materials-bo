@@ -1,0 +1,17 @@
+% Abstract (Digital Discovery: 50--250 words). Statements map to claims.tex.
+Scientific priors speed up Bayesian optimisation in materials discovery, but a prior that steers a small budget toward the
+materials it favours may miss those it disfavours. We measured this in a benchmark with a registered
+analysis plan: \R{summary/n_runs} searches (3,000 of them over 3,550 metallic multi-element Materials Project
+structures), for the shear modulus and the specific Young's modulus, with a historical prior and a composition-only elemental-modulus
+heuristic, each mixed into expected-improvement search with a fixed weight
+$\beta$. Coverage was the recall of the half of the top-5\% materials that the prior itself scores lowest. Coverage loss at
+moderate weight was detected in \R{h1cells/primary} of 6 prior--objective settings. The elemental heuristic reduced the restricted
+mean number of acquisitions to a top-1\% shear-modulus material by \R{frontier/primary/Y1:P_phys_fixed/0.25/gain} at $\beta=0.25$
+with no detected loss of coverage, but its shear-modulus form, applied to the specific modulus, lost
+\R{h2detail/primary/Y2:P_phys_fixed/0.02/relative_loss_pct}\% or more of the baseline coverage at every nonzero weight. A weight
+both beneficial and safe under the registered criterion existed in \R{h2nonempty/primary} of 6 settings
+(\R{posthoc/h2adjnonempty/primary} under a post hoc joint error control), never above $\beta=\R{h2maxbeta/primary}$, and depended
+on the safety margin and on curation. At $\beta=0.5$, in \R{n5up/primary/0.5} of 6 settings the weighted
+search found more top-5\% materials in total but, by its estimates, fewer of those its prior disfavours (a loss detected in
+\R{n5up_h1/primary/0.5}): the prior redirected the search rather than reducing its yield. Faster discovery alone therefore does not show
+that a search keeps what its prior disfavours.

@@ -1,0 +1,123 @@
+% Discussion and Conclusions. Result statements map to claims.tex; limitations follow the plan (Section 1) and the
+% related-work passes.
+\section{Discussion}\label{sec:discussion}
+
+\paragraph{Efficiency does not show that a prior-weighted search keeps what its prior disfavours.} In every primary setting
+some weight of the prior gave a demonstrable gain; at $\beta=0.5$, all \R{benefcount/primary/0.5} settings did, and none was
+safe under the registered criterion. A practitioner who chose the weight by speed alone would therefore have chosen weights
+for which a loss of a fifth or more of the baseline's recall of the good materials the prior disfavours could not be
+excluded. The settings differed in how soon this happened. For the elemental-modulus heuristic on the shear modulus, the gain
+was large, the loss of $\Sdis$ was shown to be below 20\% of the baseline at every weight up to $\beta=0.25$, and no loss was
+detected even at $\beta=0.5$; for the shear-modulus form of the same heuristic applied to the
+specific modulus, a large share of $\Sdis$ was lost at the smallest weight, for a gain that was not demonstrable. Matching the
+heuristic to the objective raised its gain on Y2, to \R{frontier/primary/Y2:P_phys_matched_Y2/0.25/gain}
+\ci{frontier/primary/Y2:P_phys_matched_Y2/0.25/gain} acquisitions at $\beta=0.25$, and H1 detected no loss for it after Holm
+correction (although its unadjusted intervals exclude zero), but no weight was safe: the bounds on its loss could not exclude 20\% of the baseline recall, and at $\beta=0.05$, $0.1$ and $0.75$ even the
+unadjusted one-sided 95\% bound showed a loss of more than 20\%. Absence of a detected loss and a demonstrably small loss are different
+statements, and only the second supports using a weight.
+
+\paragraph{Redirection, not lower yield.} In \R{n5up/primary/0.5} of the 6 settings the weighted search acquired more top-5\%
+materials in total than the no-prior search at $\beta=0.5$, while its estimated recall of $\Sdis$ was lower, a loss detected by H1 in
+\R{n5up_h1/primary/0.5} of them (Section~\ref{sec:where}). For most priors here,
+then, the cost of the weight is not fewer good materials but different ones: those the prior already favours. Whether that cost
+matters depends on the purpose of the search. It does not matter for a search that only needs some good materials; it does for one
+meant to map which good materials exist, or to find those that an incomplete heuristic or a biased history undervalues. The
+exception, the shear-modulus form of the elemental heuristic applied to the specific modulus, lost coverage without finding more
+good materials.
+
+\paragraph{What is built into the coverage measure, and what is informative.} Because $\Sdis$ is the half of the good materials
+that the prior ranks lowest, a search that follows the prior closely must lose it: at $\beta=1$ its recall was zero in every cell, as the
+construction leads one to expect, and the loss there carries little information. What the measure adds is how the loss develops at the
+weights a practitioner would use: the weight at which it becomes detectable or exceeds the safety margin, how large it is when the
+gain first becomes demonstrable, and how these differ between settings. On those questions the six settings differed widely,
+from an estimated loss of \R{h2detail/primary/Y2:P_phys_fixed/0.02/relative_loss_pct}\% of the baseline at $\beta=0.02$ (the
+Y2 elemental-modulus setting) to no loss detected by H1 even at $\beta=0.5$ (the Y1 elemental-modulus and Y2
+elemental-modulus-matched settings). $N_5$, whose definition does not involve the prior, gives the total yield beside it.
+
+\paragraph{What coverage measures.} $\Sdis$ asks whether weighting a prior costs the search the good materials that this prior
+ranks lowest. Because it is built from the prior under test, it reflects how the prior ranks the best materials as much as
+how the search behaves: a prior that ranks almost all good materials highly has an $\Sdis$ that lies mostly above its 80th
+percentile, where a prior-weighted search still looks, so $\Sdis$ can be kept while the few good materials below that
+percentile are lost. The absolute blind spot $\Sblind$ separates these effects. For the
+elemental-modulus heuristic on Y1, no loss of $\Sdis$ was detected at $\beta=0.5$, but almost all of its small blind spot was
+lost (post hoc). In this benchmark, that is the clearest sign of where a strong fixed weight takes the search: away from the good
+materials the prior ranks low, even when the prior is good enough that few such materials exist. Neither set
+measures diversity or global exploration, and other definitions of the materials a search should not miss would give other
+numbers.
+
+\paragraph{The two priors differ in information as well as in form.} The historical prior scores a candidate by its distance
+to the best materials of a labelled history of about a thousand structures. It is a nearest-neighbour heuristic by construction,
+it inherits whatever the history over-represents\cite{jia2019anthropogenic}, and such similarity-based scores are known to reach
+poorly beyond the chemistries they were built on\cite{meredig2018loco}. A coverage loss is what such a construction is likely to
+produce; what the benchmark adds is its size and how it grows with $\beta$. The
+elemental-modulus heuristic uses no labels at all. Differences between the two priors are differences between these complete
+strategies, not between prior forms at equal information, and they should not be read as showing that heuristics beat data or
+the reverse.
+
+\paragraph{Fixed and decaying weights.} The weight studied here does not decay. Prior-guided methods such as $\pi$BO let the
+prior's influence fade as observations accumulate, so that the search recovers from a misleading
+prior\cite{hvarfner2022pibo,souza2021bopro}; recent variants decay a prior placed in the Gaussian-process mean\cite{qu2026dynmeanbo}
+or prior-based preferences in the acquisition function\cite{fehring2025dynabo}. This study cannot say whether a decaying weight avoids the coverage loss: a fixed and a
+decaying weight are not on a common scale, and losses appeared within the first 10 acquisitions, when a decaying prior's influence
+is strongest. Measuring the coverage of decaying schemes on the same benchmark is a direct next step.
+
+\paragraph{Alignment.} Across the six settings, the history-side correlation between prior and objective went together with the
+gain at $\beta=0.5$ (Kendall $\tau=\R{summary/tau}$, exploratory, pooling both objectives; with six settings this is compatible with no
+association). Six settings that share objectives,
+prior constructions and a pool cannot establish that alignment explains the frontier. The observation suggests a hypothesis that
+can be tested before any search is run, that history-side alignment predicts a prior's gain; it says nothing about coverage, and
+the most aligned prior on Y2 had no safe weight. Testing it as a prediction on other pools and properties would turn it into
+evidence.
+
+\paragraph{Limitations.} Several follow from the design and are stated in the registration.
+\begin{itemize}\setlength{\itemsep}{1pt}
+\item \emph{Scope.} One database snapshot, metallic multi-element structures, DFT elastic properties, a noiseless lookup oracle
+over already-relaxed structures, one surrogate, one acquisition function, batch size 1 and a budget of 10\,+\,40 evaluations. The
+intervals describe variation over partitions of one fixed pool, whose discovery sides share about 70\% of their materials, not
+over pools or databases. The chemical-system splits hold out whole chemical systems, but 24--31\% of their discovery materials
+have a proper sub-system in history (for example, a binary of a held-out ternary), so their discovery materials are not far from
+what the history covers.
+\item \emph{Curation.} The primary universe keeps only structures whose elements pass the screen of the elemental prior's own
+reference data, which removed 24.6\% of the structures; this may favour that prior. \R{bench/snap/primary_theoretical_pct}\% of the primary structures are hypothetical
+(MP's \emph{theoretical} flag), and no thermodynamic-stability filter is applied.
+\item \emph{Descriptors.} The descriptors include each candidate's DFT-relaxed density and volume, and Y2 divides by that density,
+so the Y2 surrogate sees part of its objective.
+\item \emph{Surrogate.} The Gaussian process uses one isotropic length-scale, bounded below at 3.0; the fitted length-scale was
+at that bound in \R{healthrange/primary/lb_min}--\R{healthrange/primary/lb_max}\% of steps per arm, where shorter-range structure
+could not be represented. In pool-based materials benchmarks, anisotropic
+Gaussian processes and random forests have outperformed isotropic ones\cite{liang2021benchmarking}, so the no-prior baseline here
+may be weaker than a tuned one. Because the prior arms mix their ranks with the same surrogate, the direction in which a
+stronger surrogate would change the gains, and the baseline recall of $\Sdis$, is not known.
+\item \emph{Outcomes.} The efficiency outcome is a restricted mean; where the shares of runs without a hit differ greatly, as for
+the prior alone on Y2, it must be read with them. $\Sdis$ has some loss at high weight built in, and its recall levels are not
+comparable across priors.
+\item \emph{Decision rule.} The 20\% margin is a judgement. The registered rule controls false declarations of safety within a
+cell, not the joint beneficial-and-safe call, and nothing is adjusted across cells; with both bounds adjusted (post hoc), the
+Y2/historical-matched setting no longer qualified, since its weight rested on the unadjusted beneficial bound. The weight $\beta$
+is not comparable to the decaying weights of $\pi$BO-type methods, and no decaying arm was run. The qualifying weights
+also changed when Pm and Tc were removed or the reference screen was dropped.
+\item \emph{Exploratory history.} The benchmark, outcomes and hypotheses were developed with access to outcome labels, including
+the discovery sides of three splits of each type, and engine choices were informed by searches on history sides that cover most
+of every discovery pool. The analysis plan was registered, and amended once, before any model-driven search was run for
+results. The registered analysis guards the tests, not the choice of what to test; the previously unanalysed
+splits r3--r9 are a robustness check within the same benchmark, not a replication.
+\end{itemize}
+
+\paragraph{Implications.} Prior-guided search is spreading to priors whose reliability is hard to judge in advance, including
+those supplied by language models\cite{chen2026evidencegated} or language-model-guided search\cite{liu2024llambo}. Our results argue for a concrete reporting practice: beside any claim of faster discovery, report, at the weight actually
+used, the total number of good materials found ($N_5$ here) and the recall of those that the prior disfavours ($\Sdis$ here), each
+against the no-prior search on the same initial designs. Neither number alone shows whether a prior redirects the search or
+narrows it.
+The benchmark, its run records and its analysis code are available for testing other priors, weights and surrogates against the
+same coverage endpoints.
+
+\section{Conclusions}\label{sec:conclusions}
+In a benchmark with a registered analysis on Materials Project elasticity data, weighting a scientific prior in Bayesian search
+traded efficiency, at sufficient weight, against the recall of good materials that the prior disfavours, and the terms of that trade differed between
+prior--objective settings. A weight that was both beneficial and safe under the registered criterion existed in three of six
+settings (two under a post hoc joint error control), was always small, and depended on the safety margin and on the curation of
+the benchmark. No weight qualified in every setting, and strong fixed weights lost the prior's blind spot even where the prior
+was well aligned with the objective (post hoc). In most settings the weighted search found more good materials in total but not the same ones. Faster discovery alone is
+therefore not evidence that a prior-weighted search keeps the materials its prior disfavours; that has to be measured. These
+results are relative to one simple surrogate, a Gaussian process with a single isotropic Mat\'ern-5/2 length-scale, and expected
+improvement; a richer surrogate, for example with a length-scale per descriptor, may change them.

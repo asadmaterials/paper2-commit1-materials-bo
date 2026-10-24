@@ -1,0 +1,66 @@
+% Introduction. Positioning follows the related-work passes of 2026-10-13/14; result statements follow claims.tex.
+\section{Introduction}\label{sec:intro}
+
+Bayesian optimisation (BO) chooses the next material to evaluate by trading a surrogate model's prediction against its
+uncertainty\cite{jones1998ego,shahriari2016human,garnett2023bo}, and it has become a standard tool for searching materials spaces
+when each evaluation is costly\cite{lookman2019active,liang2021benchmarking}. With few observations the surrogate knows little,
+so scientists add what they already know: physical models in the surrogate's mean or kernel\cite{ziatdinov2022physics,
+khatamsaz2023physics}, known trends as prior means\cite{aoki2026explicitly}, similarity to good materials found before, and, most
+recently, large language models used to propose candidates, priors or surrogates\cite{liu2024llambo,chen2026evidencegated,
+kristiadi2024sober}. Such priors are usually motivated by faster search.
+
+The machine-learning literature on prior-guided BO measures them in the same terms. BOPrO combines a user's belief about the
+location of the optimum with the probabilistic model, $\pi$BO multiplies the acquisition function by it, and in both the
+belief's influence fades as data accumulate\cite{souza2021bopro,hvarfner2022pibo}; ColaBO places such beliefs in the surrogate\cite{hvarfner2024colabo}, and space warping concentrates
+sampling where the prior puts its mass\cite{ramachandran2020warping}. More recent methods reweight priors, reject those that prove
+misleading, decay a prior placed in the surrogate's mean, treat expert hypotheses as soft constraints, or learn from data how far to
+trust an expert\cite{guayhottin2025alphapibo,fehring2025dynabo,qu2026dynmeanbo,cisse2024hypbo,xu2024principled}. These methods
+are judged by regret, the best value found or the evaluation budget\cite{hennig2026psh}, and robustness means that the search
+recovers from a wrong prior: it ends near the performance it would have had without one. Added knowledge can also make a materials
+search worse\cite{weichert2025lessismore}.
+
+In materials discovery a second cost matters. Domain heuristics and historical data reflect the chemistries that people have
+already chosen to study\cite{jia2019anthropogenic}, and whether models can extrapolate to unfamiliar chemistries or to extraordinary materials has to be
+tested explicitly\cite{meredig2018loco,kauwe2020extraordinary}. A prior that steers a small search budget toward the materials it
+favours may therefore reach a good material sooner and yet miss the good materials it disfavours, which are the ones a search is
+least likely to find by other means. A search can be fast in this sense and still narrow. Benchmarks of sequential learning for
+materials report acceleration and discovery yield\cite{rohr2020benchmarking,liang2021benchmarking,borg2023quantifying}, and methods
+that target a set of materials rather than a single optimum count how many members of the set, or how many distinct good designs,
+a search finds\cite{chitturi2024bax,jiang2026rangeaware}; none asks which good materials a prior leads the search to miss. A recent
+closed-loop study in which a language model chose the search space notes that such prior knowledge may bias the search toward
+well-known families and reduce diversity, without measuring it\cite{iwasaki2026llmspace}. To our knowledge, no study
+has measured how many of the best materials that a prior disfavours a prior-weighted search gives up, and how that cost varies
+with the weight of the prior.
+
+We measure it in a benchmark with a registered analysis plan\cite{asad2026registrationv1,asad2026registration}: \R{summary/n_runs} searches on the
+elastic properties of metallic multi-element structures of the Materials Project\cite{jain2013materialsproject,
+dejong2015charting}, 3,000 of them over a primary pool of 3,550 structures and the rest in two sensitivity universes, searched for the shear modulus (Y1) and the specific Young's modulus (Y2). Two priors are used, each in a
+form built for the shear modulus and, for Y2, a form matched to the objective: a historical prior learned from the labelled
+history side of each split, and a composition-only elemental-modulus heuristic. Each prior enters the expected-improvement search
+through a rank weight $\beta$ that, unlike the weight of $\pi$BO, does not decay; it is swept from 0 (no prior) to 1 (the prior
+alone). Efficiency is the reduction in the restricted mean number of acquisitions to the first top-1\% material. Coverage is the
+recall of $\Sdis$, the half of the top-5\% materials that the prior itself scores lowest, a prior-specific stress test into which some
+loss at high weight is built; we complement it with the absolute blind spot $\Sblind$, the top materials below the prior's 80th
+percentile. The hypotheses, tests and
+a decision rule for a weight that is both beneficial and safe were registered before any model-driven search was run for
+results\cite{nosek2018preregistration}, after an exploratory phase that we report in full; inference is at the level of 20
+independent random partitions of the pool\cite{bouthillier2021variance}.
+
+The effects of a prior differ between prior--objective settings (Section~\ref{sec:results}). A loss of $\Sdis$ at moderate weight
+was detected in \R{h1cells/primary} of 6 settings. The elemental-modulus heuristic reduced the restricted mean number of acquisitions to
+a top-1\% shear-modulus material by \R{frontier/primary/Y1:P_phys_fixed/0.25/gain} at $\beta=0.25$ with no detected loss of
+$\Sdis$; at $\beta=0.5$, a post hoc analysis shows that the search lost almost all of that prior's small absolute blind spot
+$\Sblind$ (about \R{frontier/primary/Y1:P_phys_fixed/0/S_blind_mean_size} materials per run). The shear-modulus form of the same
+prior, applied to the specific modulus, lost on average \R{h2detail/primary/Y2:P_phys_fixed/0.02/relative_loss_pct}\% or more of
+the baseline recall of $\Sdis$ at every nonzero weight. A weight
+that is beneficial and safe under the registered criterion was found in \R{h2nonempty/primary} of 6 settings; in a post hoc
+version that also controls the error of the beneficial call, in \R{posthoc/h2adjnonempty/primary}. The qualifying weights changed
+with the safety margin and with the curation of the benchmark, in the primary universe no weight qualified in more than
+\R{h2maxcellsperbeta/primary} settings (\R{h2maxcellsperbeta/sens1_no_Pm_Tc} without Pm and Tc), and none at $\beta\ge0.5$.
+
+The contribution is an evaluation, not a method. We provide (i) a coverage endpoint for prior-guided search, recall of the good
+materials the prior disfavours, reported beside efficiency; (ii) a computationally reproducible benchmark of fixed-weight prior
+mixing on materials data with a registered analysis, with its code, run records and decision log; and (iii) evidence, within this benchmark, that efficiency
+gains alone do not show that a prior-weighted search keeps those materials. The results are conditional on one database, one
+family of properties, one surrogate and a budget of 50 evaluations, and the two priors differ in their information as well as
+their form: the historical prior uses about a thousand labelled materials, the heuristic none.
